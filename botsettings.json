@@ -1,5 +1,0 @@
-﻿{
-  "DatabaseConnectionString": {
-    "DefaultDatabaseConnection": "Server=(localdb)\\mssqllocaldb;Database=BotBaluAssDB;Trusted_Connection=True;MultipleActiveResultSets=true"
-  }
-}
