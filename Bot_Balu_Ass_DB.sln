@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34202.233
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bot_Balu_Ass_DB", "Bot_Balu_Ass_DB.csproj", "{F53BD303-B523-40C6-9A49-01D781E9B2EA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F53BD303-B523-40C6-9A49-01D781E9B2EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F53BD303-B523-40C6-9A49-01D781E9B2EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F53BD303-B523-40C6-9A49-01D781E9B2EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F53BD303-B523-40C6-9A49-01D781E9B2EA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {312F46B3-9629-4AF9-9C3D-F70D474DE566}
+	EndGlobalSection
+EndGlobal
