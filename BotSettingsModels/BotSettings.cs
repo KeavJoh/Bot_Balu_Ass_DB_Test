@@ -10,6 +10,6 @@ namespace Bot_Balu_Ass_DB.BotSettingsModels
     {
         public string Token { get; set; }
         public string Prefix { get; set; }
-        public int GuildId { get; set; }
+        public long GuildId { get; set; }
     }
 }
