@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Bot_Balu_Ass_DB.BotSettingsModels
 {
-    internal class BotSettings
+    internal class _BotSettings
     {
         public string Token { get; set; }
         public string Prefix { get; set; }
