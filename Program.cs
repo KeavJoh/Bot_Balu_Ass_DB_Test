@@ -1,4 +1,5 @@
 ﻿using Bot_Balu_Ass_DB.BotSettingsModels;
+using Bot_Balu_Ass_DB.Controller;
 using Bot_Balu_Ass_DB.Data.Database;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
@@ -71,45 +72,11 @@ class Program
 
         Client = new DiscordClient(discordConfig);
 
-        Client.Ready += Client_Ready;
-        Client.ComponentInteractionCreated += ButtonEventController;
-        Client.ModalSubmitted += ModalEventController;
+        Client.Ready += ClientReadyController.ClientReadyHandler;
+        Client.ComponentInteractionCreated += ButtonEventController.ButtonEventHandler;
+        Client.ModalSubmitted += ModalEventController.ModalEventHandler;
 
         await Client.ConnectAsync();
         await Task.Delay(-1);
-    }
-
-    private static Task Client_Ready(DiscordClient sender, ReadyEventArgs args)
-    {
-        return Task.CompletedTask;
-    }
-
-    private static async Task ButtonEventController(DiscordClient sender, ComponentInteractionCreateEventArgs args)
-    {
-        var buttonId = args.Interaction.Data.CustomId;
-
-        switch (buttonId)
-        {
-            case "deregister":
-                break;
-            case "register":
-                break;
-        }
-    }
-
-    private static async Task ModalEventController(DiscordClient sender, ModalSubmitEventArgs args)
-    {
-        if (args.Interaction.Type == InteractionType.ModalSubmit)
-        {
-            var modalId = args.Interaction.Data.CustomId;
-
-            switch (modalId)
-            {
-                case "deregisterModal":
-                    break;
-                case "registerModal":
-                    break;
-            }
-        }
     }
 }
