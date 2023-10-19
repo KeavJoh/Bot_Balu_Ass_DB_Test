@@ -15,6 +15,7 @@ class Program
     private static CommandsNextExtension Commands {  get; set; }
     static async Task Main(string[] args)
     {
+        //init bot configuration
         InitializeBotConfigController botConfigController = new InitializeBotConfigController();
         BotConfig botConfig = botConfigController.InitializeBotConfig();
 
@@ -22,14 +23,8 @@ class Program
         await InitializeDatabaseController.InitializeDatabaseHandler(botConfig);
 
         //init bot
-
-        var discordConfig = new DiscordConfiguration()
-        {
-            Intents = DiscordIntents.All,
-            Token = botConfig.botSettings.Token,
-            TokenType = TokenType.Bot,
-            AutoReconnect = true,
-        };
+        InitializeBotFinalController botFinalController = new InitializeBotFinalController();
+        var discordConfig = botFinalController.InitializeBotFinalHandler(botConfig);
 
         Client = new DiscordClient(discordConfig);
 
