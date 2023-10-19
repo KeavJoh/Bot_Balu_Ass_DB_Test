@@ -10,5 +10,6 @@ namespace Bot_Balu_Ass_DB.BotSettingsModels
     {
         public _DatabaseConnectionString databaseConnectionString { get; set; }
         public _BotSettings botSettings { get; set; }
+        public _ChannelSettings channelSettings { get; set; }
     }
 }
