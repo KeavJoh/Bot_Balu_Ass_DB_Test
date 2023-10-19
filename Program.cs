@@ -1,6 +1,7 @@
 ﻿using Bot_Balu_Ass_DB.BotSettingsModels;
 using Bot_Balu_Ass_DB.Controller;
 using Bot_Balu_Ass_DB.Data.Database;
+using Bot_Balu_Ass_DB.InitialController;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.EventArgs;
@@ -14,51 +15,11 @@ class Program
     private static CommandsNextExtension Commands {  get; set; }
     static async Task Main(string[] args)
     {
-        var builder = new ConfigurationBuilder();
-        BotConfig botConfig = new BotConfig();
-        IConfiguration configuration = builder.Build();
-
-        //init botsettings.json
-
-        try
-        {
-            builder.SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("botsettings.json");
-
-            configuration = builder.Build();
-        } catch (FileNotFoundException ex)
-        {
-            Console.WriteLine("Die benötigte Datei ist nicht vorhanden! Programm wird beendet");
-            Environment.Exit(1);
-        } catch (Exception ex)
-        {
-            Console.WriteLine("Es ist ein Fehler beim abrufen der benötigten Datei aufgetreten. Das Programm wird beendet");
-            Environment.Exit(1);
-        }
-
-        if (configuration != null)
-        {
-            var host = Host.CreateDefaultBuilder().ConfigureServices((context, services) =>
-            {
-                var botConfig = configuration.Get<BotConfig>();
-                if (botConfig == null)
-                {
-                    Console.WriteLine("BotConfig fehlerhaft. Programm wird beendet");
-                    Environment.Exit(1);
-                }
-                services.AddSingleton(botConfig);
-            })
-            .Build();
-
-            botConfig = host.Services.GetRequiredService<BotConfig>();
-        }
+        InitializeBotConfigController botConfigController = new InitializeBotConfigController();
+        BotConfig botConfig = botConfigController.InitializeBotConfig();
 
         //init database
-
-        using (var context = new ApplicationDbContext(botConfig))
-        {
-            context.Database.EnsureCreated();
-        }
+        await InitializeDatabaseController.InitializeDatabaseHandler(botConfig);
 
         //init bot
 
