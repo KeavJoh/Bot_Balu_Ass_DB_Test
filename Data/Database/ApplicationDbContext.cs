@@ -14,7 +14,7 @@ namespace Bot_Balu_Ass_DB.Data.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(_botConfig.databaseConnectionString.DefaultDatabaseConnection);
+            optionsBuilder.UseSqlServer(_botConfig.DatabaseConnectionString.DefaultDatabaseConnection);
         }
     }
 }

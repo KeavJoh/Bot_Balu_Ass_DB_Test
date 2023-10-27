@@ -15,7 +15,7 @@ namespace Bot_Balu_Ass_DB.InitialController
             var discordConfig = new DiscordConfiguration()
             {
                 Intents = DiscordIntents.All,
-                Token = botConfig.botSettings.Token,
+                Token = botConfig.BotSettings.Token,
                 TokenType = TokenType.Bot,
                 AutoReconnect = true,
             };

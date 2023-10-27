@@ -20,6 +20,10 @@ namespace Bot_Balu_Ass_DB.Controller
                     break;
                 case "register":
                     break;
+                case "addChildToListButton":
+                    break;
+                case "deleteChildFromListButton":
+                    break;
             }
         }
     }

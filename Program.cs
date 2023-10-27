@@ -18,6 +18,8 @@ class Program
         //init bot configuration
         InitializeBotConfigController botConfigController = new InitializeBotConfigController();
         BotConfig botConfig = botConfigController.InitializeBotConfig();
+        ApplicationDbContext context = new ApplicationDbContext(botConfig);
+        ClientReadyController clientReadyController = new ClientReadyController(context, botConfig);
 
         //init database
         await InitializeDatabaseController.InitializeDatabaseHandler(botConfig);
@@ -28,7 +30,7 @@ class Program
 
         Client = new DiscordClient(discordConfig);
 
-        Client.Ready += ClientReadyController.ClientReadyHandler;
+        Client.Ready += clientReadyController.ClientReadyHandler;
         Client.ComponentInteractionCreated += ButtonEventController.ButtonEventHandler;
         Client.ModalSubmitted += ModalEventController.ModalEventHandler;
 

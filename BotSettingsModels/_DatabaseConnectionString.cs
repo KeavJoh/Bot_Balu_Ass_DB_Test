@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Bot_Balu_Ass_DB.BotSettingsModels
 {
-    internal class _DatabaseConnectionString
+    internal class DatabaseConnectionString
     {
         public string DefaultDatabaseConnection { get; set; }
     }

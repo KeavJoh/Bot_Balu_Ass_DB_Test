@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration.Json;
 
 namespace Bot_Balu_Ass_DB.InitialController
 {
@@ -45,7 +46,8 @@ namespace Bot_Balu_Ass_DB.InitialController
         {
             var host = Host.CreateDefaultBuilder().ConfigureServices((context, services) =>
             {
-                var botConfig = configuration.Get<BotConfig>();
+                BotConfig botConfig = new BotConfig();
+                configuration.Bind(botConfig);
                 if (botConfig == null)
                 {
                     Console.WriteLine("BotConfig fehlerhaft. Programm wird beendet: ");

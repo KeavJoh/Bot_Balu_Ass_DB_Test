@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Bot_Balu_Ass_DB.BotSettingsModels
 {
-    internal class _BotSettings
+    internal class BotSettings
     {
         public string Token { get; set; }
         public string Prefix { get; set; }
-        public long GuildId { get; set; }
+        public ulong GuildId { get; set; }
     }
 }

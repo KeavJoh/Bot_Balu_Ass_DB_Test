@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Bot_Balu_Ass_DB.BotSettingsModels
 {
-    internal class _ChannelSettings
+    internal class ChannelSettings
     {
-        public long ParentsCommandChannel {  get; set; }
-        public long ParentsInformationChannel { get; set; }
-        public long ExecutiveCommandChannel { get; set; }
-        public long ExecutiveInformationChannel { get; set; }
-        public long EmployeesCommandChannel { get; set; }
-        public long EmployeesInformationChannel { get; set; }
+        public ulong ParentsCommandChannel {  get; set; }
+        public ulong ParentsInformationChannel { get; set; }
+        public ulong ExecutiveCommandChannel { get; set; }
+        public ulong ExecutiveInformationChannel { get; set; }
+        public ulong EmployeesCommandChannel { get; set; }
+        public ulong EmployeesInformationChannel { get; set; }
 
     }
 }
