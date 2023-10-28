@@ -21,6 +21,7 @@ namespace Bot_Balu_Ass_DB.Controller
                 case "register":
                     break;
                 case "addChildToListButton":
+                    await ExecutiveModalController.AddChildToDB(args);
                     break;
                 case "deleteChildFromListButton":
                     break;

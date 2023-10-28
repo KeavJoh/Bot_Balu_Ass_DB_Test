@@ -5,6 +5,7 @@ using Bot_Balu_Ass_DB.InitialController;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.EventArgs;
+using DSharpPlus.SlashCommands;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -33,6 +34,10 @@ class Program
         Client.Ready += clientReadyController.ClientReadyHandler;
         Client.ComponentInteractionCreated += ButtonEventController.ButtonEventHandler;
         Client.ModalSubmitted += ModalEventController.ModalEventHandler;
+
+        var slashCommandsConfig = Client.UseSlashCommands();
+
+        slashCommandsConfig.RegisterCommands<ExecutiveModalController>();
 
         await Client.ConnectAsync();
         await Task.Delay(-1);

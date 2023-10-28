@@ -22,6 +22,8 @@ namespace Bot_Balu_Ass_DB.Controller
                         break;
                     case "registerModal":
                         break;
+                    case "addChildToDb":
+                        break;
                 }
             }
         }
