@@ -1,4 +1,5 @@
 ﻿using Bot_Balu_Ass_DB.Data.Database;
+using DSharpPlus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace Bot_Balu_Ass_DB.BotSettingsModels
     {
         public static ApplicationDbContext Context { get; set; }
         public static BotConfig BotConfig { get; set; }
+        public static DiscordClient DiscordClient { get; set; }
 
     }
 }

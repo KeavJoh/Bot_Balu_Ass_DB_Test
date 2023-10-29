@@ -28,9 +28,9 @@ class Program
         //init bot
         InitializeBotFinalController botFinalController = new InitializeBotFinalController();
         var discordConfig = botFinalController.InitializeBotFinalHandler(botConfig);
-        await botFinalController.InitializeBotGlobalSettingsHandler(botConfig, context);
-
         Client = new DiscordClient(discordConfig);
+        await botFinalController.InitializeBotGlobalSettingsHandler(botConfig, context, Client);
+        await GlobalDataStore.InitializeGlobalDataStore();
 
         Client.Ready += clientReadyController.ClientReadyHandler;
         Client.ComponentInteractionCreated += ButtonEventController.ButtonEventHandler;

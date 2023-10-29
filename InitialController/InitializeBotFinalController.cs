@@ -24,10 +24,11 @@ namespace Bot_Balu_Ass_DB.InitialController
             return discordConfig;
         }
 
-        public Task InitializeBotGlobalSettingsHandler(BotConfig botConfig, ApplicationDbContext context)
+        public Task InitializeBotGlobalSettingsHandler(BotConfig botConfig, ApplicationDbContext context, DiscordClient sender)
         {
             GlobalSettings.Context = context;
             GlobalSettings.BotConfig = botConfig;
+            GlobalSettings.DiscordClient = sender;
 
             return Task.CompletedTask;
         }

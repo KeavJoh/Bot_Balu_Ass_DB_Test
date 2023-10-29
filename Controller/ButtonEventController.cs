@@ -24,6 +24,7 @@ namespace Bot_Balu_Ass_DB.Controller
                     await ExecutiveModalController.AddChildToDB(args);
                     break;
                 case "deleteChildFromListButton":
+                    await ExecutiveModalController.DeleteChildFromDb(args);
                     break;
             }
         }

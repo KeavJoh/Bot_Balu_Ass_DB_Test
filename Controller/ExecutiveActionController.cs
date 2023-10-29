@@ -31,7 +31,20 @@ namespace Bot_Balu_Ass_DB.Controller
             await modal.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                         .WithContent($"Leider ist ein Fehler aufgetreten. Das Datum test ist kein gültiges Datum."));
 
+            await GlobalDataStore.ReloadChildList();
+
             return;
+        }
+
+        public static async Task DeleteChildFromDb(ComponentInteractionCreateEventArgs args)
+        {
+            var context = GlobalSettings.Context;
+            var selectedChild = args.Values.FirstOrDefault();
+            int.TryParse(selectedChild, out var childIdInDb);
+            var childDb = context.Children.SingleOrDefault(x => x.Id == childIdInDb);
+            context.Children.Remove(childDb);
+            await context.SaveChangesAsync();
+            await GlobalDataStore.ReloadChildList();
         }
 
     }

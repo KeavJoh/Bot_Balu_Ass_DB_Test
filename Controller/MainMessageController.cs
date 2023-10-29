@@ -36,9 +36,7 @@ namespace Bot_Balu_Ass_DB.Controller
             var chanelId = await sender.GetChannelAsync(GlobalSettings.BotConfig.ChannelSettings.ParentsCommandChannel);
             await DeleteAllMessagesFromChannel(chanelId);
 
-            var context = GlobalSettings.Context;
-
-            List<ChildModel> childsFromDb = await context.Children.ToListAsync();
+            List<ChildModel> childsFromDb = GlobalDataStore.ChildList;
 
             var options = new List<DiscordSelectComponentOption>();
 

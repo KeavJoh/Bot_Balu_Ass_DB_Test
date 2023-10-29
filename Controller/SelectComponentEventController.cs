@@ -19,6 +19,9 @@ namespace Bot_Balu_Ass_DB.Controller
                 case "choose_dropdown":
                     await ParentsModalController.DeregisterChild(args);
                     break;
+                case "deleteChildFromDb":
+                    await ExecutiveActionController.DeleteChildFromDb(args);
+                    break;
             }
         }
     }
