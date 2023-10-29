@@ -7,22 +7,25 @@ using System.Text;
 using System.Threading.Tasks;
 using Bot_Balu_Ass_DB.Data.Database;
 using Bot_Balu_Ass_DB.BotSettingsModels;
+using Microsoft.VisualBasic;
+using DSharpPlus.SlashCommands;
 
 namespace Bot_Balu_Ass_DB.Controller
 {
     internal class ClientReadyController
     {
-        private readonly ApplicationDbContext _context;
         private readonly BotConfig _botConfig;
+        private readonly ApplicationDbContext _context;
 
-        public ClientReadyController(ApplicationDbContext context, BotConfig botConfig)
+        public ClientReadyController(BotConfig botConfig, ApplicationDbContext context)
         {
-            _context = context;
             _botConfig = botConfig;
+            _context = context;
         }
         public async Task ClientReadyHandler(DiscordClient sender, ReadyEventArgs args)
         {
             await MainMessageController.ExecutiveMainMessage(sender, _botConfig);
+            await MainMessageController.ParentsMainMessage(sender, _botConfig);
         }
     }
 }

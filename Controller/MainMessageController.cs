@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.Entities;
+using Bot_Balu_Ass_DB.Data.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bot_Balu_Ass_DB.Controller
 {
@@ -25,6 +27,33 @@ namespace Bot_Balu_Ass_DB.Controller
                 .WithDescription("Hier kann der Vorstand verschiedene Befehle ausführen. Klicke dazu einfach auf den gewünschten Befehl unter dieser Nachricht."))
                 .AddComponents(addChildToListButton)
                 .AddComponents(deleteChildFromListButton);
+
+            await chanelId.SendMessageAsync(message);
+        }
+
+        public static async Task ParentsMainMessage(DiscordClient sender, BotConfig botConfig)
+        {
+            var chanelId = await sender.GetChannelAsync(GlobalSettings.BotConfig.ChannelSettings.ParentsCommandChannel);
+            await DeleteAllMessagesFromChannel(chanelId);
+
+            var context = GlobalSettings.Context;
+
+            List<ChildModel> childsFromDb = await context.Children.ToListAsync();
+
+            var options = new List<DiscordSelectComponentOption>();
+
+            foreach (var child in childsFromDb)
+            {
+                options.Add(new DiscordSelectComponentOption(child.Name, child.Id.ToString()));
+            }
+
+            var dropdown = new DiscordSelectComponent("choose_dropdown", "Choose an option", options);
+
+            var message = new DiscordMessageBuilder()
+                .AddEmbed(new DiscordEmbedBuilder().WithColor(DiscordColor.DarkBlue)
+                .WithTitle("Hallo und herzlich Willkommen")
+                .WithDescription("Hier kann der Vorstand verschiedene Befehle ausführen. Klicke dazu einfach auf den gewünschten Befehl unter dieser Nachricht."))
+                .AddComponents(dropdown);
 
             await chanelId.SendMessageAsync(message);
         }

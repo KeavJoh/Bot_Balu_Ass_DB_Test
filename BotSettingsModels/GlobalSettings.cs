@@ -10,6 +10,7 @@ namespace Bot_Balu_Ass_DB.BotSettingsModels
     internal static class GlobalSettings
     {
         public static ApplicationDbContext Context { get; set; }
+        public static BotConfig BotConfig { get; set; }
 
     }
 }

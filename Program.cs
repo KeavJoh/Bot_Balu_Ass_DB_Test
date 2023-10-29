@@ -20,8 +20,7 @@ class Program
         InitializeBotConfigController botConfigController = new InitializeBotConfigController();
         BotConfig botConfig = botConfigController.InitializeBotConfig();
         ApplicationDbContext context = new ApplicationDbContext(botConfig);
-        GlobalSettings.Context = context;
-        ClientReadyController clientReadyController = new ClientReadyController(context, botConfig);
+        ClientReadyController clientReadyController = new ClientReadyController(botConfig, context);
 
         //init database
         await InitializeDatabaseController.InitializeDatabaseHandler(botConfig);
@@ -29,11 +28,13 @@ class Program
         //init bot
         InitializeBotFinalController botFinalController = new InitializeBotFinalController();
         var discordConfig = botFinalController.InitializeBotFinalHandler(botConfig);
+        await botFinalController.InitializeBotGlobalSettingsHandler(botConfig, context);
 
         Client = new DiscordClient(discordConfig);
 
         Client.Ready += clientReadyController.ClientReadyHandler;
         Client.ComponentInteractionCreated += ButtonEventController.ButtonEventHandler;
+        Client.ComponentInteractionCreated += SelectComponentEventController.SelectComponentEventHandler;
         Client.ModalSubmitted += ModalEventController.ModalEventHandler;
 
         var slashCommandsConfig = Client.UseSlashCommands();

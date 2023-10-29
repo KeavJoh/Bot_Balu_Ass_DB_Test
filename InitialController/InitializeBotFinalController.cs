@@ -1,4 +1,5 @@
 ﻿using Bot_Balu_Ass_DB.BotSettingsModels;
+using Bot_Balu_Ass_DB.Data.Database;
 using DSharpPlus;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,14 @@ namespace Bot_Balu_Ass_DB.InitialController
             };
 
             return discordConfig;
+        }
+
+        public Task InitializeBotGlobalSettingsHandler(BotConfig botConfig, ApplicationDbContext context)
+        {
+            GlobalSettings.Context = context;
+            GlobalSettings.BotConfig = botConfig;
+
+            return Task.CompletedTask;
         }
     }
 }
