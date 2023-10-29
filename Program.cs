@@ -20,6 +20,7 @@ class Program
         InitializeBotConfigController botConfigController = new InitializeBotConfigController();
         BotConfig botConfig = botConfigController.InitializeBotConfig();
         ApplicationDbContext context = new ApplicationDbContext(botConfig);
+        GlobalSettings.Context = context;
         ClientReadyController clientReadyController = new ClientReadyController(context, botConfig);
 
         //init database
