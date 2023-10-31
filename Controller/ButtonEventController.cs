@@ -21,10 +21,10 @@ namespace Bot_Balu_Ass_DB.Controller
                 case "register":
                     break;
                 case "addChildToListButton":
-                    await ExecutiveModalController.AddChildToDB(args);
+                    await ExecutiveModalController.AddChildToDBModal(args);
                     break;
                 case "deleteChildFromListButton":
-                    await ExecutiveModalController.DeleteChildFromDb(args);
+                    await ExecutiveModalController.DeleteChildFromDbModal(args);
                     break;
             }
         }

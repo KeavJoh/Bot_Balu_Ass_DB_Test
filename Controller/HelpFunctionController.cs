@@ -11,7 +11,7 @@ namespace Bot_Balu_Ass_DB.Controller
 {
     internal class HelpFunctionController
     {
-        public static async Task DeleteLastMessageFromChannel(DiscordClient client, int caseInt)
+        public static async Task DeleteLastMessageFromChannelHelper(DiscordClient client, int caseInt)
         {
             switch (caseInt)
             {

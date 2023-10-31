@@ -10,5 +10,7 @@ namespace Bot_Balu_Ass_DB.Data.Model
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string? Mother { get; set; }
+        public string? Father { get; set; }
     }
 }

@@ -12,7 +12,7 @@ namespace Bot_Balu_Ass_DB.Controller
 {
     internal class ParentsModalController : ApplicationCommandModule
     {
-        public static async Task DeregisterChild(ComponentInteractionCreateEventArgs args)
+        public static async Task DeregisterChildModal(ComponentInteractionCreateEventArgs args)
         {
             var modal = new DiscordInteractionResponseBuilder()
                 .WithTitle("Kind hinzufügen")

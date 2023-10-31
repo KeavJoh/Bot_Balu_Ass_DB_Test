@@ -31,7 +31,7 @@ namespace Bot_Balu_Ass_DB.Controller
                     case "registerModal":
                         break;
                     case "addChildToDb":
-                        await ExecutiveActionController.AddChildToDb(args);
+                        await ExecutiveActionController.AddChildToDbAction(args);
                         break;
                 }
             }

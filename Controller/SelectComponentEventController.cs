@@ -20,11 +20,11 @@ namespace Bot_Balu_Ass_DB.Controller
             switch (selectId)
             {
                 case "choose_dropdown":
-                    await ParentsModalController.DeregisterChild(args);
+                    await ParentsModalController.DeregisterChildModal(args);
                     break;
                 case "deleteChildFromDb":
-                    await ExecutiveActionController.DeleteChildFromDb(args);
-                    await HelpFunctionController.DeleteLastMessageFromChannel(client, 1);
+                    await ExecutiveActionController.DeleteChildFromDbAction(args);
+                    await HelpFunctionController.DeleteLastMessageFromChannelHelper(client, 1);
                     break;
             }
         }

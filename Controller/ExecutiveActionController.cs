@@ -16,14 +16,18 @@ namespace Bot_Balu_Ass_DB.Controller
 {
     internal class ExecutiveActionController
     {
-        public static async Task AddChildToDb(ModalSubmitEventArgs modal)
+        public static async Task AddChildToDbAction(ModalSubmitEventArgs modal)
         {
             var context = GlobalSettings.Context;
             string childName = modal.Values["nameOfChild"];
+            string childMother = modal.Values["nameOfMother"];
+            string childFather = modal.Values["nameOfFather"];
 
             var newChild = new ChildModel
             {
                 Name = childName,
+                Mother = childMother,
+                Father = childFather,
             };
 
             await context.Children.AddAsync(newChild);
@@ -40,7 +44,7 @@ namespace Bot_Balu_Ass_DB.Controller
             return;
         }
 
-        public static async Task DeleteChildFromDb(ComponentInteractionCreateEventArgs args)
+        public static async Task DeleteChildFromDbAction(ComponentInteractionCreateEventArgs args)
         {
             var context = GlobalSettings.Context;
             var selectedChild = args.Values.FirstOrDefault();
