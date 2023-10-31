@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Bot_Balu_Ass_DB.BotSettingsModels;
+using System.Reflection;
+using System.Threading.Channels;
 
 namespace Bot_Balu_Ass_DB.Controller
 {
@@ -21,6 +24,7 @@ namespace Bot_Balu_Ass_DB.Controller
                     break;
                 case "deleteChildFromDb":
                     await ExecutiveActionController.DeleteChildFromDb(args);
+                    await HelpFunctionController.DeleteLastMessageFromChannel(client, 1);
                     break;
             }
         }

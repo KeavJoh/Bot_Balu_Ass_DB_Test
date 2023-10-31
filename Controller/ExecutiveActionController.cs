@@ -5,6 +5,7 @@ using Bot_Balu_Ass_DB.InitialController;
 using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
+using DSharpPlus.SlashCommands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,9 +30,12 @@ namespace Bot_Balu_Ass_DB.Controller
             await context.SaveChangesAsync();
 
             await modal.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
-                        .WithContent($"Leider ist ein Fehler aufgetreten. Das Datum test ist kein gültiges Datum."));
+                        .WithContent($"Ich habe {childName} erfolgreich in die Datenbank eingeschrieben."));
 
             await GlobalDataStore.ReloadChildList();
+
+            await Task.Delay(10000);
+            await modal.Interaction.DeleteOriginalResponseAsync();
 
             return;
         }
@@ -40,11 +44,21 @@ namespace Bot_Balu_Ass_DB.Controller
         {
             var context = GlobalSettings.Context;
             var selectedChild = args.Values.FirstOrDefault();
+
             int.TryParse(selectedChild, out var childIdInDb);
             var childDb = context.Children.SingleOrDefault(x => x.Id == childIdInDb);
+            var ChildInDbName = GlobalDataStore.ChildList.FirstOrDefault(x => x.Id == childIdInDb)?.Name;
+
             context.Children.Remove(childDb);
             await context.SaveChangesAsync();
+
+            await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                .WithContent($"Ich habe {ChildInDbName} erfolgreich aus der Datenbank entfernt"));
+
             await GlobalDataStore.ReloadChildList();
+
+            await Task.Delay(10000);
+            await args.Interaction.DeleteOriginalResponseAsync();
         }
 
     }

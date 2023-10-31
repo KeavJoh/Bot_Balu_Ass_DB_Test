@@ -27,5 +27,6 @@ namespace Bot_Balu_Ass_DB.BotSettingsModels
 
             await MainMessageController.ParentsMainMessage(GlobalSettings.DiscordClient, GlobalSettings.BotConfig);
         }
+
     }
 }
