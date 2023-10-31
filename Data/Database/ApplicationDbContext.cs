@@ -9,7 +9,7 @@ namespace Bot_Balu_Ass_DB.Data.Database
         private readonly BotConfig _botConfig;
 
         public DbSet<ChildModel> Children { get; set; }
-        public DbSet<Deregistration> deregistrations { get; set; }
+        public DbSet<Deregistration> Deregistrations { get; set; }
 
         public ApplicationDbContext (BotConfig botConfig)
         {
