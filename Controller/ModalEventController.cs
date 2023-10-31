@@ -16,17 +16,14 @@ namespace Bot_Balu_Ass_DB.Controller
 
         public static async Task ModalEventHandler(DiscordClient sender, ModalSubmitEventArgs args)
         {
-            //InitializeBotConfigController botConfigController = new InitializeBotConfigController();
-            //BotConfig botConfig = botConfigController.InitializeBotConfig();
-            //ApplicationDbContext context = new ApplicationDbContext(botConfig);
-
             if (args.Interaction.Type == InteractionType.ModalSubmit)
             {
                 var modalId = args.Interaction.Data.CustomId;
 
                 switch (modalId)
                 {
-                    case "deregisterModal":
+                    case "deregisterChildPerformeFromParent":
+                        await ParentsActionController.AddDeregistrationChildToDbAction(args);
                         break;
                     case "registerModal":
                         break;

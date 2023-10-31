@@ -1,4 +1,5 @@
-﻿using DSharpPlus;
+﻿using Bot_Balu_Ass_DB.BotSettingsModels;
+using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using DSharpPlus.SlashCommands;
@@ -14,9 +15,12 @@ namespace Bot_Balu_Ass_DB.Controller
     {
         public static async Task DeregisterChildModal(ComponentInteractionCreateEventArgs args)
         {
+            var nameChild = GlobalDataStore.ChildList.FirstOrDefault(x => x.Id.ToString() == args.Values[0]).Name;
+
             var modal = new DiscordInteractionResponseBuilder()
                 .WithTitle("Kind abmelden")
-                .WithCustomId("deregisterChildFromParent")
+                .WithCustomId("deregisterChildPerformeFromParent")
+                .AddComponents(new TextInputComponent(label: "Name", "nameOfChild", value: nameChild, required: true))
                 .AddComponents(new TextInputComponent(label: "Von Datum (im Format tt.MM.jjjj)", "dateFrom", "bsp. 20.01.2024", min_length: 10, max_length: 10))
                 .AddComponents(new TextInputComponent(label: "Bis Datum (im Format tt.MM.jjjj)", "dateTo", "Nur benötigt für Abwesenheiten länger als 1 Tag", required: false, min_length: 10, max_length: 10))
                 .AddComponents(new TextInputComponent(label: "Grund", "reason", "Grund der Abwesenheit",required: false , max_length: 50));
