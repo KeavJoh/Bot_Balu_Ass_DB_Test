@@ -1,6 +1,7 @@
 ﻿using Bot_Balu_Ass_DB.BotSettingsModels;
 using DSharpPlus.Entities;
 using DSharpPlus;
+using System.Globalization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,21 @@ namespace Bot_Balu_Ass_DB.Controller
             var messages = await chanelId.GetMessagesAsync(1);
             var latestMessage = messages.FirstOrDefault();
             await latestMessage.DeleteAsync();
+        }
+
+        public static DateTime ParseStringToDateTime(string stringDateTime)
+        {
+            DateTime finalDateTime;
+            string stringFormat = "dd.MM.yyyy";
+            try
+            {
+                finalDateTime = DateTime.ParseExact(stringDateTime, stringFormat, CultureInfo.InvariantCulture);
+            }
+            catch(FormatException)
+            {
+                finalDateTime = DateTime.MinValue;
+            }
+            return finalDateTime;
         }
     }
 }

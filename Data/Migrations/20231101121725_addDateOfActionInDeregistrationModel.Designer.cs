@@ -4,6 +4,7 @@ using Bot_Balu_Ass_DB.Data.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bot_Balu_Ass_DB.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231101121725_addDateOfActionInDeregistrationModel")]
+    partial class addDateOfActionInDeregistrationModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,10 +66,13 @@ namespace Bot_Balu_Ass_DB.Migrations
                     b.Property<DateTime>("DateOfAction")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DeregistrationAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("DeregistrationForOneDay")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("DeregistrationFrom")
+                    b.Property<DateTime?>("DeregistrationFrom")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("DeregistrationPerformedFromParents")

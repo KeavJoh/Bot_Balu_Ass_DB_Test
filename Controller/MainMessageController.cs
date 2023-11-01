@@ -31,8 +31,9 @@ namespace Bot_Balu_Ass_DB.Controller
             await chanelId.SendMessageAsync(message);
         }
 
-        public static async Task ParentsMainMessage(DiscordClient sender, BotConfig botConfig)
+        public static async Task ParentsMainMessage()
         {
+            var sender = GlobalSettings.DiscordClient;
             var chanelId = await sender.GetChannelAsync(GlobalSettings.BotConfig.ChannelSettings.ParentsCommandChannel);
             await DeleteAllMessagesFromChannel(chanelId);
 

@@ -15,17 +15,24 @@ namespace Bot_Balu_Ass_DB.BotSettingsModels
         private static ApplicationDbContext context = GlobalSettings.Context;
 
         public static List<ChildModel> ChildList { get; set; }
+        public static List<Deregistration> DeregistrationList { get; set; }
 
         public static async Task InitializeGlobalDataStore()
         {
             ChildList = await context.Children.OrderBy(x => x.Name).ToListAsync();
+            DeregistrationList = await context.Deregistrations.OrderBy(x => x.DeregistrationFrom).ToListAsync();
         }
 
         public static async Task ReloadChildList()
         {
             ChildList = await context.Children.OrderBy(x => x.Name).ToListAsync();
 
-            await MainMessageController.ParentsMainMessage(GlobalSettings.DiscordClient, GlobalSettings.BotConfig);
+            await MainMessageController.ParentsMainMessage();
+        }
+
+        public static async Task ReloadDeregistrationList()
+        {
+            DeregistrationList = await context.Deregistrations.OrderBy(x => x.DeregistrationFrom).ToListAsync();
         }
 
     }

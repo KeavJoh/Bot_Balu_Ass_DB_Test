@@ -25,7 +25,7 @@ namespace Bot_Balu_Ass_DB.Controller
         public async Task ClientReadyHandler(DiscordClient sender, ReadyEventArgs args)
         {
             await MainMessageController.ExecutiveMainMessage(sender, _botConfig);
-            await MainMessageController.ParentsMainMessage(sender, _botConfig);
+            await MainMessageController.ParentsMainMessage();
         }
     }
 }
