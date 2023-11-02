@@ -14,10 +14,8 @@ namespace Bot_Balu_Ass_DB.Data.Model
         public int ChildId { get; set; }
         [StringLength(50)]
         public string? Reason { get; set; }
-        public DateTime DeregistrationFrom { get; set; }
-        public DateTime? DeregistrationTo { get; set;}
+        public DateTime DeregistrationDate{ get; set; }
         public DateTime DateOfAction { get; set; }
-        public bool DeregistrationForOneDay { get; set; }
         public bool DeregistrationPerformedFromParents { get; set; }
     }
 }

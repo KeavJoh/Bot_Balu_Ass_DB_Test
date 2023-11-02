@@ -9,8 +9,10 @@ using System.Threading.Tasks;
 using Bot_Balu_Ass_DB.BotSettingsModels;
 using System.Reflection;
 using System.Threading.Channels;
+using Bot_Balu_Ass_DB.Controller.ModalControllers;
+using Bot_Balu_Ass_DB.Controller.ActionControllers;
 
-namespace Bot_Balu_Ass_DB.Controller
+namespace Bot_Balu_Ass_DB.Controller.EventControllers
 {
     internal class SelectComponentEventController
     {
@@ -19,12 +21,15 @@ namespace Bot_Balu_Ass_DB.Controller
             var selectId = args.Interaction.Data.CustomId;
             switch (selectId)
             {
-                case "addDeregistrationToDb":
+                case "addDeregistrationToDbDropdown":
                     await ParentsModalController.DeregisterChildModal(args);
                     break;
-                case "deleteChildFromDb":
+                case "deleteChildFromDbDropdown":
                     await ExecutiveActionController.DeleteChildFromDbAction(args);
                     await HelpFunctionController.DeleteLastMessageFromChannelHelper(client, 1);
+                    break;
+                case "deleteDeregestrationFromDbDropdown":
+                    await ParentsModalController.RegistrationChildModal(args);
                     break;
             }
         }

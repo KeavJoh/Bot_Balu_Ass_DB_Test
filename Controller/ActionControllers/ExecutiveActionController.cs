@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bot_Balu_Ass_DB.Controller
+namespace Bot_Balu_Ass_DB.Controller.ActionControllers
 {
     internal class ExecutiveActionController
     {

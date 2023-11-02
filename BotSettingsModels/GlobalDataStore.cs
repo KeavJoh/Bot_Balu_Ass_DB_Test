@@ -21,7 +21,7 @@ namespace Bot_Balu_Ass_DB.BotSettingsModels
         public static async Task InitializeGlobalDataStore()
         {
             ChildList = await context.Children.OrderBy(x => x.Name).ToListAsync();
-            DeregistrationList = await context.Deregistrations.OrderBy(x => x.DeregistrationFrom).ToListAsync();
+            DeregistrationList = await context.Deregistrations.OrderBy(x => x.DeregistrationDate).ToListAsync();
         }
 
         public static async Task ReloadChildList()
@@ -33,7 +33,7 @@ namespace Bot_Balu_Ass_DB.BotSettingsModels
 
         public static async Task ReloadDeregistrationList()
         {
-            DeregistrationList = await context.Deregistrations.OrderBy(x => x.DeregistrationFrom).ToListAsync();
+            DeregistrationList = await context.Deregistrations.OrderBy(x => x.DeregistrationDate).ToListAsync();
         }
 
         public static async Task<List<DiscordSelectComponentOption>> GetChildList()

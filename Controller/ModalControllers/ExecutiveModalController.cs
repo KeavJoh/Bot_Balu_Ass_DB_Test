@@ -11,7 +11,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bot_Balu_Ass_DB.Controller
+namespace Bot_Balu_Ass_DB.Controller.ModalControllers
 {
     internal class ExecutiveModalController : ApplicationCommandModule
     {
@@ -31,7 +31,7 @@ namespace Bot_Balu_Ass_DB.Controller
         {
             var options = await Task.Run(GlobalDataStore.GetChildList);
 
-            var dropdown = new DiscordSelectComponent("deleteChildFromDb", "Kind zum löschen wählen", options);
+            var dropdown = new DiscordSelectComponent("deleteChildFromDbDropdown", "Kind zum löschen wählen", options);
 
             var message = new DiscordInteractionResponseBuilder()
                 .AddEmbed(new DiscordEmbedBuilder().WithColor(DiscordColor.DarkRed)

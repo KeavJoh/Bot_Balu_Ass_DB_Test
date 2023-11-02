@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 using Bot_Balu_Ass_DB.Data.Database;
 using Bot_Balu_Ass_DB.BotSettingsModels;
 using Bot_Balu_Ass_DB.InitialController;
+using Bot_Balu_Ass_DB.Controller.ActionControllers;
 
-namespace Bot_Balu_Ass_DB.Controller
+namespace Bot_Balu_Ass_DB.Controller.EventControllers
 {
     internal class ModalEventController
     {
@@ -22,11 +23,11 @@ namespace Bot_Balu_Ass_DB.Controller
 
                 switch (modalId)
                 {
-                    case "deregisterChildPerformeFromParent":
+                    case "deregisterChildPerformeFromParentModal":
                         await ParentsActionController.AddDeregistrationChildToDbAction(args);
                         await HelpFunctionController.DeleteLastMessageFromChannelHelper(client, 2);
                         break;
-                    case "registerModal":
+                    case "registerChildPerformedFromParentModal":
                         break;
                     case "addChildToDb":
                         await ExecutiveActionController.AddChildToDbAction(args);

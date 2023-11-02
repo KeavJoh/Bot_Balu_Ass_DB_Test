@@ -5,8 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Bot_Balu_Ass_DB.Controller.ModalControllers;
 
-namespace Bot_Balu_Ass_DB.Controller
+namespace Bot_Balu_Ass_DB.Controller.EventControllers
 {
     internal class ButtonEventController
     {
@@ -20,6 +21,7 @@ namespace Bot_Balu_Ass_DB.Controller
                     await ParentsModalController.DeregisterChildDropdownModal(args);
                     break;
                 case "deleteDeregistrationButton":
+                    await ParentsModalController.RegisterChildDropdownModal(args);
                     break;
                 case "addChildToListButton":
                     await ExecutiveModalController.AddChildToDBModal(args);
