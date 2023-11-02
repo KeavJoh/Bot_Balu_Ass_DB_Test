@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Microsoft.VisualBasic;
 using System.Reflection.Metadata.Ecma335;
 using Microsoft.EntityFrameworkCore;
+using Bot_Balu_Ass_DB.Controller.EventControllers;
 
 namespace Bot_Balu_Ass_DB.Controller.ActionControllers
 {
@@ -44,6 +45,8 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
 
                     await context.Deregistrations.AddAsync(newDeregistration);
                     await context.SaveChangesAsync();
+
+                    await GlobalDataStore.ReloadDeregistrationList();
 
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                         .WithContent($"Ich habe {childName} erfolgreich Abgemeldet"));
@@ -105,6 +108,8 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
                         await context.SaveChangesAsync();
                     }
 
+                    await GlobalDataStore.ReloadDeregistrationList();
+
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                         .WithContent($"Ich habe {childName} erfolgreich Abgemeldet"));
                     await Task.Delay(10000);
@@ -151,8 +156,75 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
                     context.Deregistrations.Remove(selectedDeregistration);
                     await context.SaveChangesAsync();
 
+                    await GlobalDataStore.ReloadDeregistrationList();
+
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                         .WithContent($"Ich habe {childName} für den angegebenen Zeitraum wieder Angemeldet"));
+                    await Task.Delay(10000);
+                    await args.Interaction.DeleteOriginalResponseAsync();
+                }
+                else
+                {
+                    await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                        .WithContent($"Es gibt für den Zeitraum keine Abmeldung für {childName}! Eine Anmeldung ist somit nicht nötig"));
+                    await Task.Delay(10000);
+                    await args.Interaction.DeleteOriginalResponseAsync();
+                }
+            }
+            else
+            {
+                DateTime dateToCheck = dateFrom;
+                var deregistrationForWithdrawn = new List<Deregistration>();
+
+                while (dateToCheck <= dateTo)
+                {
+                        var existingDeregistration = GlobalDataStore.DeregistrationList.FirstOrDefault(d => d.ChildName == childName && d.DeregistrationDate == dateToCheck);
+                        if (existingDeregistration == null)
+                        {
+                            dateToCheck = dateToCheck.AddDays(1);
+                            continue;
+                        }
+                        else
+                        {
+                            deregistrationForWithdrawn.Add(existingDeregistration);
+                            dateToCheck = dateToCheck.AddDays(1);
+                    }
+                }
+
+                if(deregistrationForWithdrawn.Count != 0)
+                {
+                    foreach (var data in deregistrationForWithdrawn)
+                    {
+                        var selectedDeregistrationInDb = context.Deregistrations.FirstOrDefault(d => d.Id == data.Id);
+                        var newWithdrawDeregistration = new WithdrawnDeregistration()
+                        {
+                            ChildName = data.ChildName,
+                            ChildId = data.ChildId,
+                            DeregistrationDate = data.DeregistrationDate,
+                            DeregistrationReason = data.Reason,
+                            DateOfDeregistrationAction = data.DateOfAction,
+                            DateOfWithdrawn = DateTime.Now,
+                            DeregistrationPerformedFromParents = data.DeregistrationPerformedFromParents,
+                            WithdrawnPerformedFromParents = true
+                        };
+
+                        await context.WithdrawnDeregistrations.AddAsync(newWithdrawDeregistration);
+                        context.Deregistrations.Remove(selectedDeregistrationInDb);
+                    }
+
+                    await context.SaveChangesAsync();
+
+                    await GlobalDataStore.ReloadDeregistrationList();
+
+                    await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                        .WithContent($"Ich habe {childName} für den angegebenen Zeitraum wieder Angemeldet"));
+                    await Task.Delay(10000);
+                    await args.Interaction.DeleteOriginalResponseAsync();
+                }
+                else
+                {
+                    await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                        .WithContent($"Es gibt für den Zeitraum keine Abmeldung für {childName}! Eine Anmeldung ist somit nicht nötig"));
                     await Task.Delay(10000);
                     await args.Interaction.DeleteOriginalResponseAsync();
                 }
