@@ -10,15 +10,16 @@ namespace Bot_Balu_Ass_DB.Controller
 {
     internal class ButtonEventController
     {
-        public static async Task ButtonEventHandler(DiscordClient sender, ComponentInteractionCreateEventArgs args)
+        public static async Task ButtonEventHandler(DiscordClient client, ComponentInteractionCreateEventArgs args)
         {
             var buttonId = args.Interaction.Data.CustomId;
 
             switch (buttonId)
             {
-                case "deregister":
+                case "addDeregistrationButton":
+                    await ParentsModalController.DeregisterChildDropdownModal(args);
                     break;
-                case "register":
+                case "deleteDeregistrationButton":
                     break;
                 case "addChildToListButton":
                     await ExecutiveModalController.AddChildToDBModal(args);

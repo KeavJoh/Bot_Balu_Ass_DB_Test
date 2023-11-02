@@ -37,22 +37,27 @@ namespace Bot_Balu_Ass_DB.Controller
             var chanelId = await sender.GetChannelAsync(GlobalSettings.BotConfig.ChannelSettings.ParentsCommandChannel);
             await DeleteAllMessagesFromChannel(chanelId);
 
-            List<ChildModel> childsFromDb = GlobalDataStore.ChildList;
+            DiscordButtonComponent addDeregistrationButton = new DiscordButtonComponent(ButtonStyle.Primary, "addDeregistrationButton", "Kind Abmelden");
+            DiscordButtonComponent deleteDeregistrationButton = new DiscordButtonComponent(ButtonStyle.Danger, "deleteDeregistrationButton", "Kind Anmelden");
 
-            var options = new List<DiscordSelectComponentOption>();
 
-            foreach (var child in childsFromDb)
-            {
-                options.Add(new DiscordSelectComponentOption(child.Name, child.Id.ToString()));
-            }
+            //List<ChildModel> childsFromDb = GlobalDataStore.ChildList;
 
-            var dropdown = new DiscordSelectComponent("choose_dropdown", "Choose an option", options);
+            //var options = new List<DiscordSelectComponentOption>();
+
+            //foreach (var child in childsFromDb)
+            //{
+            //    options.Add(new DiscordSelectComponentOption(child.Name, child.Id.ToString()));
+            //}
+
+            //var dropdown = new DiscordSelectComponent("choose_dropdown", "Choose an option", options);
 
             var message = new DiscordMessageBuilder()
                 .AddEmbed(new DiscordEmbedBuilder().WithColor(DiscordColor.DarkBlue)
                 .WithTitle("Hallo und herzlich Willkommen")
                 .WithDescription("Hier kann der Vorstand verschiedene Befehle ausführen. Klicke dazu einfach auf den gewünschten Befehl unter dieser Nachricht."))
-                .AddComponents(dropdown);
+                .AddComponents(addDeregistrationButton)
+                .AddComponents(deleteDeregistrationButton);
 
             await chanelId.SendMessageAsync(message);
         }

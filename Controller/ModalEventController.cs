@@ -14,7 +14,7 @@ namespace Bot_Balu_Ass_DB.Controller
     internal class ModalEventController
     {
 
-        public static async Task ModalEventHandler(DiscordClient sender, ModalSubmitEventArgs args)
+        public static async Task ModalEventHandler(DiscordClient client, ModalSubmitEventArgs args)
         {
             if (args.Interaction.Type == InteractionType.ModalSubmit)
             {
@@ -24,6 +24,7 @@ namespace Bot_Balu_Ass_DB.Controller
                 {
                     case "deregisterChildPerformeFromParent":
                         await ParentsActionController.AddDeregistrationChildToDbAction(args);
+                        await HelpFunctionController.DeleteLastMessageFromChannelHelper(client, 2);
                         break;
                     case "registerModal":
                         break;

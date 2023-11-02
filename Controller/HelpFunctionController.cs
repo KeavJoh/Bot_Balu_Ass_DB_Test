@@ -17,8 +17,12 @@ namespace Bot_Balu_Ass_DB.Controller
             switch (caseInt)
             {
                 case 1:
-                    var chanelId = await client.GetChannelAsync(GlobalSettings.BotConfig.ChannelSettings.ExecutiveCommandChannel);
-                    await DeleteLastMessageInSelectedChannel(chanelId);
+                    var chanelId1 = await client.GetChannelAsync(GlobalSettings.BotConfig.ChannelSettings.ExecutiveCommandChannel);
+                    await DeleteLastMessageInSelectedChannel(chanelId1);
+                    break;
+                case 2:
+                    var chanelId2 = await client.GetChannelAsync(GlobalSettings.BotConfig.ChannelSettings.ParentsCommandChannel);
+                    await DeleteLastMessageInSelectedChannel(chanelId2);
                     break;
             }
         }

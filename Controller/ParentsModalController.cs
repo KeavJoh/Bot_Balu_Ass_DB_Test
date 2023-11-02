@@ -1,4 +1,5 @@
 ﻿using Bot_Balu_Ass_DB.BotSettingsModels;
+using Bot_Balu_Ass_DB.Data.Model;
 using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
@@ -27,5 +28,18 @@ namespace Bot_Balu_Ass_DB.Controller
 
             await args.Interaction.CreateResponseAsync(InteractionResponseType.Modal, modal);
         }
+
+        public static async Task DeregisterChildDropdownModal(ComponentInteractionCreateEventArgs args) 
+        {
+            var options = await Task.Run(GlobalDataStore.GetChildList);
+            var dropdown = new DiscordSelectComponent("addDeregistrationToDb", "Kind zum Abmelden auswählen", options);
+
+            var message = new DiscordInteractionResponseBuilder()
+                .AddEmbed(new DiscordEmbedBuilder().WithColor(DiscordColor.DarkBlue)
+                .WithTitle("Welches Kind soll Abgemeldet werden?"))
+                .AddComponents(dropdown);
+
+            await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, message);
+        } 
     }
 }

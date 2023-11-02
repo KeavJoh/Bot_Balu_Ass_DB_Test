@@ -1,6 +1,7 @@
 ﻿using Bot_Balu_Ass_DB.Controller;
 using Bot_Balu_Ass_DB.Data.Database;
 using Bot_Balu_Ass_DB.Data.Model;
+using DSharpPlus.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,20 @@ namespace Bot_Balu_Ass_DB.BotSettingsModels
         public static async Task ReloadDeregistrationList()
         {
             DeregistrationList = await context.Deregistrations.OrderBy(x => x.DeregistrationFrom).ToListAsync();
+        }
+
+        public static async Task<List<DiscordSelectComponentOption>> GetChildList()
+        {
+            List<ChildModel> childsFromDb = ChildList;
+
+            var options = new List<DiscordSelectComponentOption>();
+
+            foreach (var child in childsFromDb)
+            {
+                options.Add(new DiscordSelectComponentOption(child.Name, child.Id.ToString()));
+            }
+
+            return options;
         }
 
     }

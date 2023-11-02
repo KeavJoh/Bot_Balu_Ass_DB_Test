@@ -19,7 +19,7 @@ namespace Bot_Balu_Ass_DB.Controller
             var selectId = args.Interaction.Data.CustomId;
             switch (selectId)
             {
-                case "choose_dropdown":
+                case "addDeregistrationToDb":
                     await ParentsModalController.DeregisterChildModal(args);
                     break;
                 case "deleteChildFromDb":

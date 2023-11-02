@@ -29,14 +29,7 @@ namespace Bot_Balu_Ass_DB.Controller
 
         public static async Task DeleteChildFromDbModal(ComponentInteractionCreateEventArgs args)
         {
-            List<ChildModel> childsFromDb = GlobalDataStore.ChildList;
-
-            var options = new List<DiscordSelectComponentOption>();
-
-            foreach (var child in childsFromDb)
-            {
-                options.Add(new DiscordSelectComponentOption(child.Name, child.Id.ToString()));
-            }
+            var options = await Task.Run(GlobalDataStore.GetChildList);
 
             var dropdown = new DiscordSelectComponent("deleteChildFromDb", "Kind zum löschen wählen", options);
 
