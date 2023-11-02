@@ -27,6 +27,16 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
             DateTime dateTo = HelpFunctionController.ParseStringToDateTime(values["dateTo"]);
             var reason = values["reason"];
 
+            if (dateFrom < DateTime.Now)
+            {
+                await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                    .WithContent($"Das angegebene Datum liegt in der Vergangenheit. Eine Abmeldung für die Vergangenheit ist nicht möglich!"));
+
+                await Task.Delay(10000);
+                await args.Interaction.DeleteOriginalResponseAsync();
+                return;
+            }
+
             if (dateTo == DateTime.MinValue || dateTo == dateFrom)
             {
                 var existingDeregistration = GlobalDataStore.DeregistrationList.FirstOrDefault(d => d.ChildName == childName && d.DeregistrationDate == dateFrom);
