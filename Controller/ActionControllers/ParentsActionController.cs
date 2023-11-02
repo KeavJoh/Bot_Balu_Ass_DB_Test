@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualBasic;
 using System.Reflection.Metadata.Ecma335;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bot_Balu_Ass_DB.Controller.ActionControllers
 {
@@ -124,7 +125,38 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
             var context = GlobalSettings.Context;
             var values = args.Values;
 
+            var childName = values["nameOfChild"];
+            DateTime dateFrom = HelpFunctionController.ParseStringToDateTime(values["dateFrom"]);
+            DateTime dateTo = HelpFunctionController.ParseStringToDateTime(values["dateTo"]);
 
+            if(dateTo == DateTime.MinValue || dateTo == dateFrom)
+            {
+                var selectedDeregistration = GlobalDataStore.DeregistrationList.FirstOrDefault(d => d.ChildName == childName && d.DeregistrationDate == dateFrom);
+                if (selectedDeregistration != null)
+                {
+                    var selectedDeregistrationInDb = context.Deregistrations.FirstOrDefault(d => d.Id == selectedDeregistration.Id);
+                    var newWithdrawDeregistration = new WithdrawnDeregistration()
+                    {
+                        ChildName = selectedDeregistration.ChildName,
+                        ChildId = selectedDeregistration.ChildId,
+                        DeregistrationDate = selectedDeregistration.DeregistrationDate,
+                        DeregistrationReason = selectedDeregistration.Reason,
+                        DateOfDeregistrationAction = selectedDeregistration.DateOfAction,
+                        DateOfWithdrawn = DateTime.Now,
+                        DeregistrationPerformedFromParents = selectedDeregistration.DeregistrationPerformedFromParents,
+                        WithdrawnPerformedFromParents = true
+                    };
+
+                    await context.WithdrawnDeregistrations.AddAsync(newWithdrawDeregistration);
+                    context.Deregistrations.Remove(selectedDeregistration);
+                    await context.SaveChangesAsync();
+
+                    await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                        .WithContent($"Ich habe {childName} für den angegebenen Zeitraum wieder Angemeldet"));
+                    await Task.Delay(10000);
+                    await args.Interaction.DeleteOriginalResponseAsync();
+                }
+            }
         }
     }
 }

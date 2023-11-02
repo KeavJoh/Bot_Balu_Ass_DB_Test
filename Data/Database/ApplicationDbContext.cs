@@ -10,6 +10,7 @@ namespace Bot_Balu_Ass_DB.Data.Database
 
         public DbSet<ChildModel> Children { get; set; }
         public DbSet<Deregistration> Deregistrations { get; set; }
+        public DbSet<WithdrawnDeregistration> WithdrawnDeregistrations { get; set; }
 
         public ApplicationDbContext (BotConfig botConfig)
         {

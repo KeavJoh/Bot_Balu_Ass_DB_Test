@@ -28,6 +28,8 @@ namespace Bot_Balu_Ass_DB.Controller.EventControllers
                         await HelpFunctionController.DeleteLastMessageFromChannelHelper(client, 2);
                         break;
                     case "registerChildPerformedFromParentModal":
+                        await ParentsActionController.CompleteRegistrationToDbAction(args);
+                        await HelpFunctionController.DeleteLastMessageFromChannelHelper(client, 2);
                         break;
                     case "addChildToDb":
                         await ExecutiveActionController.AddChildToDbAction(args);
