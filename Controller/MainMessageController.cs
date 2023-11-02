@@ -40,18 +40,6 @@ namespace Bot_Balu_Ass_DB.Controller
             DiscordButtonComponent addDeregistrationButton = new DiscordButtonComponent(ButtonStyle.Primary, "addDeregistrationButton", "Kind Abmelden");
             DiscordButtonComponent deleteDeregistrationButton = new DiscordButtonComponent(ButtonStyle.Danger, "deleteDeregistrationButton", "Kind Anmelden");
 
-
-            //List<ChildModel> childsFromDb = GlobalDataStore.ChildList;
-
-            //var options = new List<DiscordSelectComponentOption>();
-
-            //foreach (var child in childsFromDb)
-            //{
-            //    options.Add(new DiscordSelectComponentOption(child.Name, child.Id.ToString()));
-            //}
-
-            //var dropdown = new DiscordSelectComponent("choose_dropdown", "Choose an option", options);
-
             var message = new DiscordMessageBuilder()
                 .AddEmbed(new DiscordEmbedBuilder().WithColor(DiscordColor.DarkBlue)
                 .WithTitle("Hallo und herzlich Willkommen")
