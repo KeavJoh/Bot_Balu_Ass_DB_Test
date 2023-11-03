@@ -109,9 +109,14 @@ namespace Bot_Balu_Ass_DB.Controller
 
             var deregistrationList = GlobalDataStore.DeregistrationList
                 .Where(d => d.DeregistrationDate.Date > DateTime.Now.Date)
-                .GroupBy(d => CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(
-                    d.DeregistrationDate, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday))
-                .OrderBy(g => g.Key)
+                .GroupBy(d => new
+                {
+                    Year = d.DeregistrationDate.Year,
+                    Week = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(
+                        d.DeregistrationDate, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday)
+                })
+                .OrderBy(g => g.Key.Year)
+                .ThenBy(g => g.Key.Week)
                 .ToList();
 
             var embedInitialMessage = new DiscordEmbedBuilder()
@@ -132,7 +137,7 @@ namespace Bot_Balu_Ass_DB.Controller
                 foreach (var weeklyGroup in deregistrationList)
                 {
                     // Fügt die Kalenderwoche hinzu
-                    descriptionBuilder.AppendLine($"**KW {weeklyGroup.Key}**");
+                    descriptionBuilder.AppendLine($"**KW {weeklyGroup.Key.Week}**");
                     descriptionBuilder.AppendLine("-----");
 
                     var dailyGroups = weeklyGroup
