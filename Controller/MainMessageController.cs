@@ -41,13 +41,17 @@ namespace Bot_Balu_Ass_DB.Controller
             await DeleteAllMessagesFromChannel(chanelId);
 
             DiscordButtonComponent addDeregistrationForCurrontDayButton = new DiscordButtonComponent(ButtonStyle.Primary, "addDeregistrationForCurrontDayButton", "Schnellabmeldung");
-            DiscordButtonComponent addDeregistrationButton = new DiscordButtonComponent(ButtonStyle.Primary, "addDeregistrationButton", "Kind Abmelden");
-            DiscordButtonComponent deleteDeregistrationButton = new DiscordButtonComponent(ButtonStyle.Danger, "deleteDeregistrationButton", "Kind Anmelden");
+            DiscordButtonComponent addDeregistrationButton = new DiscordButtonComponent(ButtonStyle.Primary, "addDeregistrationButton", "Abmelden");
+            DiscordButtonComponent deleteDeregistrationButton = new DiscordButtonComponent(ButtonStyle.Danger, "deleteDeregistrationButton", "Anmelden");
 
             var message = new DiscordMessageBuilder()
                 .AddEmbed(new DiscordEmbedBuilder().WithColor(DiscordColor.DarkBlue)
                 .WithTitle("Hallo und herzlich Willkommen")
-                .WithDescription("Hier kann der Vorstand verschiedene Befehle ausführen. Klicke dazu einfach auf den gewünschten Befehl unter dieser Nachricht."))
+                .WithDescription("Hier kannst du dein Kind Abmelden oder auch wieder Anmelden. Klicke dazu einfach auf einen der unten stehenden Befehle.")
+                .AddField("Schnellabmeldung", $"`Hier kannst du dein Kind für den aktuellen Tag abmelden`")
+                .AddField("Abmeldung", $"`Hier kannst du dein Kind für einen oder mehrere Tage abmelden`")
+                .AddField("Anmelden", $"`Hier kannst du eine Abmeldung für einen oder mehrere Tage rückgängig machen`")
+                .AddField("Heutiges Datum", $"`{DateTime.Now.Date.ToString("dd.MM.yyyy")}`", false))
                 .AddComponents(addDeregistrationForCurrontDayButton)
                 .AddComponents(addDeregistrationButton)
                 .AddComponents(deleteDeregistrationButton);

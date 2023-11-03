@@ -51,7 +51,7 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
             {
                 var existingDeregistration = GlobalDataStore.DeregistrationList.FirstOrDefault(d => d.ChildName == childName && d.DeregistrationDate == dateFrom);
 
-                if (existingDeregistration == null && (dateFrom.DayOfWeek != DayOfWeek.Saturday || dateFrom.DayOfWeek != DayOfWeek.Sunday || dateFrom != DateTime.Now))
+                if (existingDeregistration == null && (dateFrom.DayOfWeek != DayOfWeek.Saturday || dateFrom.DayOfWeek != DayOfWeek.Sunday || dateFrom != DateTime.Now.Date))
                 {
                     var newDeregistration = new Deregistration
                     {
@@ -229,6 +229,50 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                         .WithContent($"Es gibt für den Zeitraum keine Abmeldung für {childName}! Eine Anmeldung ist somit nicht nötig"));
                 }
+            }
+
+            await GlobalDataStore.ReloadDeregistrationList();
+            await MainMessageController.DeregistrationInformationDateTimeNowMainMessage();
+            await MainMessageController.DeregistrationInformationFutureMainMessage();
+            await Task.Delay(10000);
+            await args.Interaction.DeleteOriginalResponseAsync();
+        }
+
+        public static async Task AddDeregistrationChildForCurrentDayToDbAction(ComponentInteractionCreateEventArgs args)
+        {
+            var context = GlobalSettings.Context;
+            var selectedChild = args.Values.FirstOrDefault();
+            int.TryParse(selectedChild, out var childIdInDb);
+            var childDb = context.Children.SingleOrDefault(x => x.Id == childIdInDb);
+            var ChildInDbName = GlobalDataStore.ChildList.FirstOrDefault(x => x.Id == childIdInDb)?.Name;
+            var existingDeregistration = GlobalDataStore.DeregistrationList.FirstOrDefault(d => d.ChildName == ChildInDbName && d.DeregistrationDate == DateTime.Now.Date);
+
+            if (existingDeregistration != null)
+            {
+                await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                     .WithContent($"Für den angegebenen Zeitraum existiert für {ChildInDbName} bereits eine Abmeldung oder es handelt sich um einen Samstag/Sonntag"));
+
+                await Task.Delay(10000);
+                await args.Interaction.DeleteOriginalResponseAsync();
+                return;
+            }
+            else
+            {
+                var newDeregistration = new Deregistration
+                {
+                    ChildName = ChildInDbName,
+                    ChildId = childIdInDb,
+                    Reason = "kurzfristig abgesagt",
+                    DeregistrationDate = DateTime.Now.Date,
+                    DeregistrationPerformedFromParents = true,
+                    DateOfAction = DateTime.Now
+                };
+
+                await context.Deregistrations.AddAsync(newDeregistration);
+                await context.SaveChangesAsync();
+
+                await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                     .WithContent($"Ich habe {ChildInDbName} für den angegebenen Zeitraum abgemeldet"));
             }
 
             await GlobalDataStore.ReloadDeregistrationList();
