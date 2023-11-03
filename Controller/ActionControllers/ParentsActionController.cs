@@ -37,6 +37,16 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
                 return;
             }
 
+            if (dateFrom.DayOfWeek == DayOfWeek.Sunday || dateFrom.DayOfWeek == DayOfWeek.Saturday)
+            {
+                await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                    .WithContent($"Das angegebene Datum ist ein Samstag oder Sonntag! Für diese Tage wird keine Abmeldung benötigt"));
+
+                await Task.Delay(10000);
+                await args.Interaction.DeleteOriginalResponseAsync();
+                return;
+            }
+
             if (dateTo == DateTime.MinValue || dateTo == dateFrom)
             {
                 var existingDeregistration = GlobalDataStore.DeregistrationList.FirstOrDefault(d => d.ChildName == childName && d.DeregistrationDate == dateFrom);
