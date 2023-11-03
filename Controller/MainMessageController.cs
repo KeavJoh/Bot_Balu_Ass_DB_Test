@@ -48,7 +48,7 @@ namespace Bot_Balu_Ass_DB.Controller
                 .AddEmbed(new DiscordEmbedBuilder().WithColor(DiscordColor.DarkBlue)
                 .WithTitle("Hallo und herzlich Willkommen")
                 .WithDescription("Hier kann der Vorstand verschiedene Befehle ausführen. Klicke dazu einfach auf den gewünschten Befehl unter dieser Nachricht."))
-                .AddComponents()
+                .AddComponents(addDeregistrationForCurrontDayButton)
                 .AddComponents(addDeregistrationButton)
                 .AddComponents(deleteDeregistrationButton);
 

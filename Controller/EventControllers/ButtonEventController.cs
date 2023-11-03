@@ -29,6 +29,9 @@ namespace Bot_Balu_Ass_DB.Controller.EventControllers
                 case "deleteChildFromListButton":
                     await ExecutiveModalController.DeleteChildFromDbModal(args);
                     break;
+                case "addDeregistrationForCurrontDayButton":
+                    await ParentsModalController.AddDeregistrationForCurrontDayDropdownModal(args);
+                    break;
             }
         }
     }

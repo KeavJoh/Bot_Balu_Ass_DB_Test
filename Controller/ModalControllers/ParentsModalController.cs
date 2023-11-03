@@ -68,5 +68,18 @@ namespace Bot_Balu_Ass_DB.Controller.ModalControllers
 
             await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, message);
         }
+
+        public static async Task AddDeregistrationForCurrontDayDropdownModal(ComponentInteractionCreateEventArgs args)
+        {
+            var options = await Task.Run(GlobalDataStore.GetChildList);
+            var dropdown = new DiscordSelectComponent("addDeregistrationForCurrontDayToDbDropdown", "Kind zum Abmelden auswählen", options);
+
+            var message = new DiscordInteractionResponseBuilder()
+                .AddEmbed(new DiscordEmbedBuilder().WithColor(DiscordColor.DarkBlue)
+                .WithTitle("Welches Kind soll Abgemeldet werden"))
+                .AddComponents(dropdown);
+
+            await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, message);
+        }
     }
 }

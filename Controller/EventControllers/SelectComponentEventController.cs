@@ -31,6 +31,8 @@ namespace Bot_Balu_Ass_DB.Controller.EventControllers
                 case "deleteDeregestrationFromDbDropdown":
                     await ParentsModalController.RegistrationChildModal(args);
                     break;
+                case "addDeregistrationForCurrontDayToDbDropdown":
+                    break;
             }
         }
     }
