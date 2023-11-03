@@ -50,6 +50,35 @@ namespace Bot_Balu_Ass_DB.Controller
             await chanelId.SendMessageAsync(message);
         }
 
+        public static async Task DeregistrationInformationDateTimeNowMainMessage()
+        {
+            var client = GlobalSettings.DiscordClient;
+            var channelId = await client.GetChannelAsync(GlobalSettings.BotConfig.ChannelSettings.ParentsInformationChannel);
+            await DeleteAllMessagesFromChannel(channelId);
+
+            var deregistrationList = GlobalDataStore.DeregistrationList.Where(d => d.DeregistrationDate == DateTime.Now).ToList();
+
+            var embedInitialMessage = new DiscordEmbedBuilder()
+            {
+                Title = "__Abmeldungen für heute__",
+                Color = DiscordColor.Red,
+                Timestamp = DateTime.Now
+            };
+
+            var descriptionBuilder = new StringBuilder();
+
+            if (!deregistrationList.Any())
+            {
+                descriptionBuilder.AppendLine($"**{DateTime.Now.ToString("dd.MM.yyyy")}**");
+                descriptionBuilder.AppendLine($" ");
+                descriptionBuilder.AppendLine($"`Für heute sind keine Kinder abgemeldet`");
+
+                embedInitialMessage.Description = descriptionBuilder.ToString();
+            }
+
+            await channelId.SendMessageAsync(embedInitialMessage);
+        }
+
         private static async Task DeleteAllMessagesFromChannel(DiscordChannel discordChannel)
         {
             var allMessagesInChannel = await discordChannel.GetMessagesAsync();
