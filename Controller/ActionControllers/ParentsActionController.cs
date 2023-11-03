@@ -27,7 +27,7 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
             DateTime dateTo = HelpFunctionController.ParseStringToDateTime(values["dateTo"]);
             var reason = values["reason"];
 
-            if (dateFrom < DateTime.Now)
+            if (dateFrom < DateTime.Now.Date)
             {
                 await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                     .WithContent($"Das angegebene Datum liegt in der Vergangenheit. Eine Abmeldung für die Vergangenheit ist nicht möglich!"));
@@ -56,21 +56,14 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
                     await context.Deregistrations.AddAsync(newDeregistration);
                     await context.SaveChangesAsync();
 
-                    await GlobalDataStore.ReloadDeregistrationList();
-
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                         .WithContent($"Ich habe {childName} erfolgreich Abgemeldet"));
-
-                    await Task.Delay(10000);
-                    await args.Interaction.DeleteOriginalResponseAsync();
                 }
                 else
                 {
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                          .WithContent($"Für den angegebenen Zeitraum existiert für {childName} bereits eine Abmeldung oder es handelt sich um einen Samstag/Sonntag"));
 
-                    await Task.Delay(10000);
-                    await args.Interaction.DeleteOriginalResponseAsync();
                 }
             }
             else
@@ -118,21 +111,21 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
                         await context.SaveChangesAsync();
                     }
 
-                    await GlobalDataStore.ReloadDeregistrationList();
-
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                         .WithContent($"Ich habe {childName} erfolgreich Abgemeldet"));
-                    await Task.Delay(10000);
-                    await args.Interaction.DeleteOriginalResponseAsync();
                 }
                 else
                 {
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                         .WithContent($"Für den angegebenen Zeitraum existiert bereits eine Abmeldung für {childName}"));
-                    await Task.Delay(10000);
-                    await args.Interaction.DeleteOriginalResponseAsync();
                 }
             }
+
+            await GlobalDataStore.ReloadDeregistrationList();
+            await MainMessageController.DeregistrationInformationDateTimeNowMainMessage();
+            await MainMessageController.DeregistrationInformationFutureMainMessage();
+            await Task.Delay(10000);
+            await args.Interaction.DeleteOriginalResponseAsync();
         }
 
         public static async Task CompleteRegistrationToDbAction(ModalSubmitEventArgs args)
@@ -166,19 +159,13 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
                     context.Deregistrations.Remove(selectedDeregistration);
                     await context.SaveChangesAsync();
 
-                    await GlobalDataStore.ReloadDeregistrationList();
-
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                         .WithContent($"Ich habe {childName} für den angegebenen Zeitraum wieder Angemeldet"));
-                    await Task.Delay(10000);
-                    await args.Interaction.DeleteOriginalResponseAsync();
                 }
                 else
                 {
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                         .WithContent($"Es gibt für den Zeitraum keine Abmeldung für {childName}! Eine Anmeldung ist somit nicht nötig"));
-                    await Task.Delay(10000);
-                    await args.Interaction.DeleteOriginalResponseAsync();
                 }
             }
             else
@@ -224,21 +211,21 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
 
                     await context.SaveChangesAsync();
 
-                    await GlobalDataStore.ReloadDeregistrationList();
-
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                         .WithContent($"Ich habe {childName} für den angegebenen Zeitraum wieder Angemeldet"));
-                    await Task.Delay(10000);
-                    await args.Interaction.DeleteOriginalResponseAsync();
                 }
                 else
                 {
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                         .WithContent($"Es gibt für den Zeitraum keine Abmeldung für {childName}! Eine Anmeldung ist somit nicht nötig"));
-                    await Task.Delay(10000);
-                    await args.Interaction.DeleteOriginalResponseAsync();
                 }
             }
+
+            await GlobalDataStore.ReloadDeregistrationList();
+            await MainMessageController.DeregistrationInformationDateTimeNowMainMessage();
+            await MainMessageController.DeregistrationInformationFutureMainMessage();
+            await Task.Delay(10000);
+            await args.Interaction.DeleteOriginalResponseAsync();
         }
     }
 }

@@ -8,6 +8,7 @@ using DSharpPlus;
 using DSharpPlus.Entities;
 using Bot_Balu_Ass_DB.Data.Model;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace Bot_Balu_Ass_DB.Controller
 {
@@ -56,7 +57,7 @@ namespace Bot_Balu_Ass_DB.Controller
             var channelId = await client.GetChannelAsync(GlobalSettings.BotConfig.ChannelSettings.ParentsInformationChannel);
             await DeleteAllMessagesFromChannel(channelId);
 
-            var deregistrationList = GlobalDataStore.DeregistrationList.Where(d => d.DeregistrationDate == DateTime.Now).ToList();
+            var deregistrationList = GlobalDataStore.DeregistrationList.Where(d => d.DeregistrationDate == DateTime.Now.Date).ToList();
 
             var embedInitialMessage = new DiscordEmbedBuilder()
             {
@@ -72,11 +73,80 @@ namespace Bot_Balu_Ass_DB.Controller
                 descriptionBuilder.AppendLine($"**{DateTime.Now.ToString("dd.MM.yyyy")}**");
                 descriptionBuilder.AppendLine($" ");
                 descriptionBuilder.AppendLine($"`Für heute sind keine Kinder abgemeldet`");
+            }
+            else
+            {
+                descriptionBuilder.AppendLine($"**{DateTime.Now.ToString("dd.MM.yyyy")}**");
 
-                embedInitialMessage.Description = descriptionBuilder.ToString();
+                foreach (var deregisterChild in deregistrationList)
+                {
+                    descriptionBuilder.AppendLine($"`- {deregisterChild.ChildName}: {deregisterChild.Reason}`");
+                }
+
+                descriptionBuilder.AppendLine($" ");
             }
 
+            embedInitialMessage.Description = descriptionBuilder.ToString();
             await channelId.SendMessageAsync(embedInitialMessage);
+        }
+
+        public static async Task DeregistrationInformationFutureMainMessage()
+        {
+            var client = GlobalSettings.DiscordClient;
+            var channelId = await client.GetChannelAsync(GlobalSettings.BotConfig.ChannelSettings.ParentsInformationChannel);
+
+            var deregistrationList = GlobalDataStore.DeregistrationList
+                .Where(d => d.DeregistrationDate.Date > DateTime.Now.Date)
+                .GroupBy(d => CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(
+                    d.DeregistrationDate, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday))
+                .OrderBy(g => g.Key)
+                .ToList();
+
+            var embedInitialMessage = new DiscordEmbedBuilder()
+            {
+                Title = "__Zukünftige Abmeldungen__",
+                Color = DiscordColor.Yellow,
+                Timestamp = DateTime.Now,
+            };
+
+            var descriptionBuilder = new StringBuilder();
+
+            if (!deregistrationList.Any())
+            {
+                descriptionBuilder.AppendLine($"**Es gibt keine Abmeldungen für die nächsten Tage**");
+            }
+            else
+            {
+                foreach (var weeklyGroup in deregistrationList)
+                {
+                    // Fügt die Kalenderwoche hinzu
+                    descriptionBuilder.AppendLine($"**KW {weeklyGroup.Key}**");
+                    descriptionBuilder.AppendLine("-----");
+
+                    var dailyGroups = weeklyGroup
+                        .OrderBy(d => d.DeregistrationDate)
+                        .GroupBy(d => d.DeregistrationDate.Date)
+                        .ToList();
+
+                    foreach (var dailyGroup in dailyGroups)
+                    {
+                        string dateHeader = dailyGroup.Key.ToString("**dddd, dd.MM.yyyy**", new CultureInfo("de-DE"));
+                        descriptionBuilder.AppendLine(dateHeader);
+
+                        foreach (var deregistration in dailyGroup)
+                        {
+                            descriptionBuilder.AppendLine($"`- {deregistration.ChildName}: {deregistration.Reason ?? "kein Grund angegeben"}`");
+                        }
+
+                        descriptionBuilder.AppendLine(); // Fügt eine Leerzeile nach den Einträgen eines Tages hinzu
+                    }
+
+                    //descriptionBuilder.AppendLine(); // Fügt eine Leerzeile nach den Einträgen einer Woche hinzu
+                }
+            }
+
+            embedInitialMessage.Description = descriptionBuilder.ToString();
+            await channelId.SendMessageAsync(embed: embedInitialMessage.Build());
         }
 
         private static async Task DeleteAllMessagesFromChannel(DiscordChannel discordChannel)
