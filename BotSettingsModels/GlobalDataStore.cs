@@ -27,13 +27,14 @@ namespace Bot_Balu_Ass_DB.BotSettingsModels
         public static async Task ReloadChildList()
         {
             ChildList = await context.Children.OrderBy(x => x.Name).ToListAsync();
-
-            await MainMessageController.ParentsMainMessage();
         }
 
         public static async Task ReloadDeregistrationList()
         {
             DeregistrationList = await context.Deregistrations.OrderBy(x => x.DeregistrationDate).ToListAsync();
+
+            await MainMessageController.DeregistrationInformationDateTimeNowMainMessage();
+            await MainMessageController.DeregistrationInformationFutureMainMessage();
         }
 
         public static async Task<List<DiscordSelectComponentOption>> GetChildList()

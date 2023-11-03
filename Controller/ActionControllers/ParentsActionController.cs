@@ -132,8 +132,6 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
             }
 
             await GlobalDataStore.ReloadDeregistrationList();
-            await MainMessageController.DeregistrationInformationDateTimeNowMainMessage();
-            await MainMessageController.DeregistrationInformationFutureMainMessage();
             await Task.Delay(10000);
             await args.Interaction.DeleteOriginalResponseAsync();
         }
@@ -232,8 +230,6 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
             }
 
             await GlobalDataStore.ReloadDeregistrationList();
-            await MainMessageController.DeregistrationInformationDateTimeNowMainMessage();
-            await MainMessageController.DeregistrationInformationFutureMainMessage();
             await Task.Delay(10000);
             await args.Interaction.DeleteOriginalResponseAsync();
         }
@@ -276,8 +272,6 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
             }
 
             await GlobalDataStore.ReloadDeregistrationList();
-            await MainMessageController.DeregistrationInformationDateTimeNowMainMessage();
-            await MainMessageController.DeregistrationInformationFutureMainMessage();
             await Task.Delay(10000);
             await args.Interaction.DeleteOriginalResponseAsync();
         }
