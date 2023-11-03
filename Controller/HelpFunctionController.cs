@@ -48,5 +48,15 @@ namespace Bot_Balu_Ass_DB.Controller
             }
             return finalDateTime;
         }
+
+        //Delete all messages from given channel
+        public static async Task DeleteAllMessagesFromChannel(DiscordChannel discordChannel)
+        {
+            var allMessagesInChannel = await discordChannel.GetMessagesAsync();
+            if (allMessagesInChannel.Count > 0)
+            {
+                await discordChannel.DeleteMessagesAsync(allMessagesInChannel);
+            }
+        }
     }
 }

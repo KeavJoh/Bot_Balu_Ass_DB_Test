@@ -10,6 +10,7 @@ using Bot_Balu_Ass_DB.Data.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.Net.WebSockets;
+using System.Threading.Channels;
 
 namespace Bot_Balu_Ass_DB.Controller
 {
@@ -19,8 +20,8 @@ namespace Bot_Balu_Ass_DB.Controller
         public static async Task ExecutiveMainMessage()
         {
             var client = GlobalSettings.DiscordClient;
-            var chanelId = await client.GetChannelAsync(GlobalSettings.BotConfig.ChannelSettings.ExecutiveCommandChannel);
-            await DeleteAllMessagesFromChannel(chanelId);
+            var channelId = await client.GetChannelAsync(GlobalSettings.BotConfig.ChannelSettings.ExecutiveCommandChannel);
+            await HelpFunctionController.DeleteAllMessagesFromChannel(channelId);
 
             DiscordButtonComponent addChildToListButton = new DiscordButtonComponent(ButtonStyle.Primary, "addChildToListButton", "Kind hinzufügen");
             DiscordButtonComponent deleteChildFromListButton = new DiscordButtonComponent(ButtonStyle.Danger, "deleteChildFromListButton", "Kind entfernen");
@@ -32,15 +33,15 @@ namespace Bot_Balu_Ass_DB.Controller
                 .AddComponents(addChildToListButton)
                 .AddComponents(deleteChildFromListButton);
 
-            await chanelId.SendMessageAsync(message);
+            await channelId.SendMessageAsync(message);
         }
 
         //Main message for parents in parents_command channel
         public static async Task ParentsMainMessage()
         {
             var client = GlobalSettings.DiscordClient;
-            var chanelId = await client.GetChannelAsync(GlobalSettings.BotConfig.ChannelSettings.ParentsCommandChannel);
-            await DeleteAllMessagesFromChannel(chanelId);
+            var channelId = await client.GetChannelAsync(GlobalSettings.BotConfig.ChannelSettings.ParentsCommandChannel);
+            await HelpFunctionController.DeleteAllMessagesFromChannel(channelId);
 
             DiscordButtonComponent addDeregistrationForCurrontDayButton = new DiscordButtonComponent(ButtonStyle.Primary, "addDeregistrationForCurrontDayButton", "Schnellabmeldung");
             DiscordButtonComponent addDeregistrationButton = new DiscordButtonComponent(ButtonStyle.Primary, "addDeregistrationButton", "Abmelden");
@@ -58,7 +59,7 @@ namespace Bot_Balu_Ass_DB.Controller
                 .AddComponents(addDeregistrationButton)
                 .AddComponents(deleteDeregistrationButton);
 
-            await chanelId.SendMessageAsync(message);
+            await channelId.SendMessageAsync(message);
         }
 
         //Main information message of deregistration for actual day
@@ -66,7 +67,7 @@ namespace Bot_Balu_Ass_DB.Controller
         {
             var client = GlobalSettings.DiscordClient;
             var channelId = await client.GetChannelAsync(GlobalSettings.BotConfig.ChannelSettings.ParentsInformationChannel);
-            await DeleteAllMessagesFromChannel(channelId);
+            await HelpFunctionController.DeleteAllMessagesFromChannel(channelId);
 
             var deregistrationList = GlobalDataStore.DeregistrationList.Where(d => d.DeregistrationDate == DateTime.Now.Date).ToList();
 
@@ -164,16 +165,6 @@ namespace Bot_Balu_Ass_DB.Controller
 
             embedInitialMessage.Description = descriptionBuilder.ToString();
             await channelId.SendMessageAsync(embed: embedInitialMessage.Build());
-        }
-
-        //Delete all messages from given channel
-        private static async Task DeleteAllMessagesFromChannel(DiscordChannel discordChannel)
-        {
-            var allMessagesInChannel = await discordChannel.GetMessagesAsync();
-            if (allMessagesInChannel.Count > 0)
-            {
-                await discordChannel.DeleteMessagesAsync(allMessagesInChannel);
-            }
         }
     }
 }
