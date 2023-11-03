@@ -9,15 +9,17 @@ using DSharpPlus.Entities;
 using Bot_Balu_Ass_DB.Data.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
+using System.Net.WebSockets;
 
 namespace Bot_Balu_Ass_DB.Controller
 {
     internal class MainMessageController
     {
         //Main message for executive in executive_command channel
-        public static async Task ExecutiveMainMessage(DiscordClient sender, BotConfig botConfig)
+        public static async Task ExecutiveMainMessage()
         {
-            var chanelId = await sender.GetChannelAsync(botConfig.ChannelSettings.ExecutiveCommandChannel);
+            var client = GlobalSettings.DiscordClient;
+            var chanelId = await client.GetChannelAsync(GlobalSettings.BotConfig.ChannelSettings.ExecutiveCommandChannel);
             await DeleteAllMessagesFromChannel(chanelId);
 
             DiscordButtonComponent addChildToListButton = new DiscordButtonComponent(ButtonStyle.Primary, "addChildToListButton", "Kind hinzufügen");
@@ -36,8 +38,8 @@ namespace Bot_Balu_Ass_DB.Controller
         //Main message for parents in parents_command channel
         public static async Task ParentsMainMessage()
         {
-            var sender = GlobalSettings.DiscordClient;
-            var chanelId = await sender.GetChannelAsync(GlobalSettings.BotConfig.ChannelSettings.ParentsCommandChannel);
+            var client = GlobalSettings.DiscordClient;
+            var chanelId = await client.GetChannelAsync(GlobalSettings.BotConfig.ChannelSettings.ParentsCommandChannel);
             await DeleteAllMessagesFromChannel(chanelId);
 
             DiscordButtonComponent addDeregistrationForCurrontDayButton = new DiscordButtonComponent(ButtonStyle.Primary, "addDeregistrationForCurrontDayButton", "Schnellabmeldung");
