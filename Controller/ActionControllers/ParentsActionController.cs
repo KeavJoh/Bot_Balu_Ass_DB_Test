@@ -81,6 +81,16 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
                 DateTime dateToCheck = dateFrom;
                 var dates = new List<DateTime>();
 
+                if (dateTo < dateFrom)
+                {
+                    await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                        .WithContent($"Der angegebene Zeitraum passt nicht zusammen. Bitte überprüfe den angegebenen Zeitraum auf beispielsweise Fehler in den Jahreszahlen ({dateFrom.ToString("dd.MM.yyyy")} - {dateTo.ToString("dd.MM.yyyy")})"));
+
+                    await Task.Delay(10000);
+                    await args.Interaction.DeleteOriginalResponseAsync();
+                    return;
+                }
+
                 while(dateToCheck <= dateTo)
                 {
                     if ((dateToCheck.DayOfWeek != DayOfWeek.Sunday && dateToCheck.DayOfWeek != DayOfWeek.Saturday) || dateToCheck < DateTime.Now)
@@ -270,6 +280,9 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
                 await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                      .WithContent($"Ich habe {ChildInDbName} für den angegebenen Zeitraum abgemeldet"));
             }
+
+            //var member = await args.Guild.GetMemberAsync(args.User.Id);
+            //await member.SendMessageAsync($"Hallo {member.DisplayName}, ich habe {ChildInDbName} für heute abgemeldet.");
 
             await GlobalDataStore.ReloadDeregistrationList();
             await Task.Delay(10000);
