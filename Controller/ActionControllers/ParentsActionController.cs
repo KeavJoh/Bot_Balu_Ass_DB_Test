@@ -12,6 +12,7 @@ using Microsoft.VisualBasic;
 using System.Reflection.Metadata.Ecma335;
 using Microsoft.EntityFrameworkCore;
 using Bot_Balu_Ass_DB.Controller.EventControllers;
+using Bot_Balu_Ass_DB.ValidationController;
 
 namespace Bot_Balu_Ass_DB.Controller.ActionControllers
 {
@@ -27,7 +28,7 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
             DateTime dateTo = HelpFunctionController.ParseStringToDateTime(values["dateTo"]);
             var reason = values["reason"];
 
-            if (dateFrom < DateTime.Now.Date)
+            if (DeregistrationRegistrationValidation.DateIsInThePast(dateFrom))
             {
                 await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                     .WithContent($"Das angegebene Datum liegt in der Vergangenheit. Eine Abmeldung für die Vergangenheit ist nicht möglich!"));
@@ -37,7 +38,7 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
                 return;
             }
 
-            if (dateTo == DateTime.MinValue || dateTo == dateFrom)
+            if (DeregistrationRegistrationValidation.DeregistrationRegistrationForOneDay(dateFrom, dateTo))
             {
                 if (dateFrom.DayOfWeek == DayOfWeek.Sunday || dateFrom.DayOfWeek == DayOfWeek.Saturday)
                 {
@@ -73,7 +74,7 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
                 DateTime dateToCheck = dateFrom;
                 var dates = new List<DateTime>();
 
-                if (dateTo < dateFrom)
+                if (DeregistrationRegistrationValidation.DateToIsLowerDateFrom(dateTo, dateFrom))
                 {
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                         .WithContent($"Der angegebene Zeitraum passt nicht zusammen. Bitte überprüfe den angegebenen Zeitraum auf beispielsweise Fehler in den Jahreszahlen ({dateFrom.ToString("dd.MM.yyyy")} - {dateTo.ToString("dd.MM.yyyy")})"));
@@ -139,7 +140,7 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
             DateTime dateFrom = HelpFunctionController.ParseStringToDateTime(values["dateFrom"]);
             DateTime dateTo = HelpFunctionController.ParseStringToDateTime(values["dateTo"]);
 
-            if(dateTo == DateTime.MinValue || dateTo == dateFrom)
+            if(DeregistrationRegistrationValidation.DeregistrationRegistrationForOneDay(dateFrom, dateTo))
             {
                 var selectedDeregistration = GlobalDataStore.DeregistrationList.FirstOrDefault(d => d.ChildName == childName && d.DeregistrationDate == dateFrom);
                 if (selectedDeregistration != null)
@@ -236,9 +237,6 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
                 await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                      .WithContent($"Ich habe {ChildInDbName} für den angegebenen Zeitraum abgemeldet"));
             }
-
-            //var member = await args.Guild.GetMemberAsync(args.User.Id);
-            //await member.SendMessageAsync($"Hallo {member.DisplayName}, ich habe {ChildInDbName} für heute abgemeldet.");
 
             await GlobalDataStore.ReloadDeregistrationList();
             await Task.Delay(10000);
