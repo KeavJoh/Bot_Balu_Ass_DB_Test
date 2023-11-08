@@ -17,5 +17,12 @@ namespace Bot_Balu_Ass_DB.Data.Model
         public DateTime DeregistrationDate{ get; set; }
         public DateTime DateOfAction { get; set; }
         public bool DeregistrationPerformedFromParents { get; set; }
+
+        public static Deregistration CreateDeregistration(string childName, int childId, string reason, DateTime deregistrationDate, DateTime dateOfAction, bool performedFromParents)
+        {
+            var Deregistration = new Deregistration { ChildName = childName, ChildId = childId, Reason = reason, DeregistrationDate = deregistrationDate, DateOfAction = dateOfAction, DeregistrationPerformedFromParents = performedFromParents };
+
+            return Deregistration;
+        }
     }
 }

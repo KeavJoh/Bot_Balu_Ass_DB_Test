@@ -20,5 +20,12 @@ namespace Bot_Balu_Ass_DB.Data.Model
         public bool DeregistrationPerformedFromParents { get; set; }
         public bool WithdrawnPerformedFromParents { get; set; }
 
+
+        public static WithdrawnDeregistration CreateWithdrawnDeregistration(string childName, int childId, string reason, DateTime deregistrationDate, DateTime dateOfDeregistratioAction, bool fromParents, bool withdrawnFromParents)
+        {
+            var withdrawn = new WithdrawnDeregistration { ChildName = childName, ChildId = childId, DeregistrationReason = reason, DeregistrationDate = deregistrationDate, DateOfDeregistrationAction = dateOfDeregistratioAction, DateOfWithdrawn = DateTime.Now, DeregistrationPerformedFromParents = fromParents, WithdrawnPerformedFromParents = withdrawnFromParents };
+            
+            return withdrawn;
+        }
     }
 }
