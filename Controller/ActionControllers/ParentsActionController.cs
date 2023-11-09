@@ -13,6 +13,7 @@ using System.Reflection.Metadata.Ecma335;
 using Microsoft.EntityFrameworkCore;
 using Bot_Balu_Ass_DB.Controller.EventControllers;
 using Bot_Balu_Ass_DB.ValidationController;
+using Bot_Balu_Ass_DB.Controller.MessageController;
 
 namespace Bot_Balu_Ass_DB.Controller.ActionControllers
 {
@@ -31,7 +32,7 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
             if (DeregistrationRegistrationValidation.DateIsInThePast(dateFrom))
             {
                 await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
-                    .WithContent($"Das angegebene Datum liegt in der Vergangenheit. Eine Abmeldung für die Vergangenheit ist nicht möglich!"));
+                    .WithContent(DeregistrationRegistrationMessageController.BuildDeregistrationRegistrationMessage("DateIsInThePast")));
 
                 await Task.Delay(10000);
                 await args.Interaction.DeleteOriginalResponseAsync();
@@ -43,7 +44,7 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
                 if (dateFrom.DayOfWeek == DayOfWeek.Sunday || dateFrom.DayOfWeek == DayOfWeek.Saturday)
                 {
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
-                        .WithContent($"Das angegebene Datum ist ein Samstag oder Sonntag! Für diese Tage wird keine Abmeldung benötigt"));
+                        .WithContent(DeregistrationRegistrationMessageController.BuildDeregistrationRegistrationMessage("DateIsAWeekendDay")));
 
                     await Task.Delay(10000);
                     await args.Interaction.DeleteOriginalResponseAsync();
@@ -60,12 +61,12 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
                     await context.SaveChangesAsync();
 
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
-                        .WithContent($"Ich habe {childName} erfolgreich Abgemeldet"));
+                        .WithContent(DeregistrationRegistrationMessageController.BuildDeregistrationRegistrationMessage("CompleteDeregistration", childName)));
                 }
                 else
                 {
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
-                         .WithContent($"Für den angegebenen Zeitraum existiert für {childName} bereits eine Abmeldung oder es handelt sich um einen Samstag/Sonntag"));
+                         .WithContent(DeregistrationRegistrationMessageController.BuildDeregistrationRegistrationMessage("ExistsDeregistration", childName)));
 
                 }
             }
@@ -77,7 +78,7 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
                 if (DeregistrationRegistrationValidation.DateToIsLowerDateFrom(dateTo, dateFrom))
                 {
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
-                        .WithContent($"Der angegebene Zeitraum passt nicht zusammen. Bitte überprüfe den angegebenen Zeitraum auf beispielsweise Fehler in den Jahreszahlen ({dateFrom.ToString("dd.MM.yyyy")} - {dateTo.ToString("dd.MM.yyyy")})"));
+                        .WithContent(DeregistrationRegistrationMessageController.BuildDeregistrationRegistrationMessage("DatePeriodError", dateFrom, dateTo)));
 
                     await Task.Delay(10000);
                     await args.Interaction.DeleteOriginalResponseAsync();
@@ -117,12 +118,12 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
                     }
 
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
-                        .WithContent($"Ich habe {childName} erfolgreich Abgemeldet"));
+                        .WithContent(DeregistrationRegistrationMessageController.BuildDeregistrationRegistrationMessage("CompleteDeregistration", childName)));
                 }
                 else
                 {
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
-                        .WithContent($"Für den angegebenen Zeitraum existiert bereits eine Abmeldung für {childName}"));
+                        .WithContent(DeregistrationRegistrationMessageController.BuildDeregistrationRegistrationMessage("ExistsDeregistration", childName)));
                 }
             }
 
@@ -153,12 +154,12 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
                     await context.SaveChangesAsync();
 
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
-                        .WithContent($"Ich habe {childName} für den angegebenen Zeitraum wieder Angemeldet"));
+                        .WithContent(DeregistrationRegistrationMessageController.BuildDeregistrationRegistrationMessage("CompleteRegistration", childName)));
                 }
                 else
                 {
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
-                        .WithContent($"Es gibt für den Zeitraum keine Abmeldung für {childName}! Eine Anmeldung ist somit nicht nötig"));
+                        .WithContent(DeregistrationRegistrationMessageController.BuildDeregistrationRegistrationMessage("NoExistingDeregistration", childName)));
                 }
             }
             else
@@ -195,12 +196,12 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
                     await context.SaveChangesAsync();
 
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
-                        .WithContent($"Ich habe {childName} für den angegebenen Zeitraum wieder Angemeldet"));
+                        .WithContent(DeregistrationRegistrationMessageController.BuildDeregistrationRegistrationMessage("CompleteRegistration", childName)));
                 }
                 else
                 {
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
-                        .WithContent($"Es gibt für den Zeitraum keine Abmeldung für {childName}! Eine Anmeldung ist somit nicht nötig"));
+                        .WithContent(DeregistrationRegistrationMessageController.BuildDeregistrationRegistrationMessage("NoExistingDeregistration", childName)));
                 }
             }
 
@@ -215,13 +216,22 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
             var selectedChild = args.Values.FirstOrDefault();
             int.TryParse(selectedChild, out var childIdInDb);
             var childDb = context.Children.SingleOrDefault(x => x.Id == childIdInDb);
-            var ChildInDbName = GlobalDataStore.ChildList.FirstOrDefault(x => x.Id == childIdInDb)?.Name;
-            var existingDeregistration = GlobalDataStore.DeregistrationList.FirstOrDefault(d => d.ChildName == ChildInDbName && d.DeregistrationDate == DateTime.Now.Date);
+            var childInDbName = GlobalDataStore.ChildList.FirstOrDefault(x => x.Id == childIdInDb)?.Name;
+            var existingDeregistration = GlobalDataStore.DeregistrationList.FirstOrDefault(d => d.ChildName == childInDbName && d.DeregistrationDate == DateTime.Now.Date);
 
-            if (existingDeregistration != null)
+            if (DateTime.Now.DayOfWeek == DayOfWeek.Sunday || DateTime.Now.DayOfWeek == DayOfWeek.Saturday)
             {
                 await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
-                     .WithContent($"Für den angegebenen Zeitraum existiert für {ChildInDbName} bereits eine Abmeldung oder es handelt sich um einen Samstag/Sonntag"));
+                    .WithContent(DeregistrationRegistrationMessageController.BuildDeregistrationRegistrationMessage("DateIsAWeekendDay")));
+
+                await Task.Delay(10000);
+                await args.Interaction.DeleteOriginalResponseAsync();
+                return;
+            }
+            else if (existingDeregistration != null)
+            {
+                await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                     .WithContent(DeregistrationRegistrationMessageController.BuildDeregistrationRegistrationMessage("ExistsDeregistration", childInDbName)));
 
                 await Task.Delay(10000);
                 await args.Interaction.DeleteOriginalResponseAsync();
@@ -229,13 +239,13 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
             }
             else
             {
-                var newDeregistration = Deregistration.CreateDeregistration(ChildInDbName, childIdInDb, "Schnellabmeldung", DateTime.Now.Date, DateTime.Now, true);
+                var newDeregistration = Deregistration.CreateDeregistration(childInDbName, childIdInDb, "Schnellabmeldung", DateTime.Now.Date, DateTime.Now, true);
 
                 await context.Deregistrations.AddAsync(newDeregistration);
                 await context.SaveChangesAsync();
 
                 await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
-                     .WithContent($"Ich habe {ChildInDbName} für den angegebenen Zeitraum abgemeldet"));
+                     .WithContent(DeregistrationRegistrationMessageController.BuildDeregistrationRegistrationMessage("CompleteDeregistration", childInDbName)));
             }
 
             await GlobalDataStore.ReloadDeregistrationList();
