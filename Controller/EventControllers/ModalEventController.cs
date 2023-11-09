@@ -24,12 +24,27 @@ namespace Bot_Balu_Ass_DB.Controller.EventControllers
                 switch (modalId)
                 {
                     case "deregisterChildPerformeFromParentModal":
-                        await ParentsActionController.AddDeregistrationChildToDbAction(args);
-                        await HelpFunctionController.DeleteLastMessageFromChannelHelper(client, 2);
+                        if(args.Interaction.ChannelId == GlobalSettings.BotConfig.ChannelSettings.ParentsCommandChannel)
+                        {
+                            await ParentsActionController.AddDeregistrationChildToDbAction(args);
+                        }
+                        else
+                        {
+                            await EmployeesActionController.AddDeregistrationChildToDbAction(args);
+                        }
+                        await HelpFunctionController.DeleteLastMessageFromChannelHelper(client, args);
                         break;
+
                     case "registerChildPerformedFromParentModal":
-                        await ParentsActionController.CompleteRegistrationToDbAction(args);
-                        await HelpFunctionController.DeleteLastMessageFromChannelHelper(client, 2);
+                        if(args.Interaction.ChannelId == GlobalSettings.BotConfig.ChannelSettings.ParentsCommandChannel)
+                        {
+                            await ParentsActionController.CompleteRegistrationToDbAction(args);
+                        }
+                        else
+                        {
+                            await EmployeesActionController.CompleteRegistrationToDbAction(args);
+                        }
+                        await HelpFunctionController.DeleteLastMessageFromChannelHelper(client, args);
                         break;
                     case "addChildToDb":
                         await ExecutiveActionController.AddChildToDbAction(args);

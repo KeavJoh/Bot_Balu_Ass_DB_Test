@@ -7,28 +7,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DSharpPlus.EventArgs;
 
 namespace Bot_Balu_Ass_DB.Controller
 {
     internal class HelpFunctionController
     {
-        public static async Task DeleteLastMessageFromChannelHelper(DiscordClient client, int caseInt)
+        public static async Task DeleteLastMessageFromChannelHelper(DiscordClient client, ModalSubmitEventArgs args)
         {
-            switch (caseInt)
-            {
-                case 1:
-                    var channelId1 = await client.GetChannelAsync(GlobalSettings.BotConfig.ChannelSettings.ExecutiveCommandChannel);
-                    await DeleteLastMessageInSelectedChannel(channelId1);
-                    break;
-                case 2:
-                    var channelId2 = await client.GetChannelAsync(GlobalSettings.BotConfig.ChannelSettings.ParentsCommandChannel);
-                    await DeleteLastMessageInSelectedChannel(channelId2);
-                    break;
-            }
+            var channelId = await client.GetChannelAsync(args.Interaction.ChannelId);
+            await DeleteLastMessageInSelectedChannel(channelId);
+        }
+
+        public static async Task DeleteLastMessageFromChannelHelper(DiscordClient client, ComponentInteractionCreateEventArgs args)
+        {
+            var channelId = await client.GetChannelAsync(args.Interaction.ChannelId);
+            await DeleteLastMessageInSelectedChannel(channelId);
         }
 
         //Delete all messages from given channel
-        public static async Task DeleteAllMessagesFromChannel(DiscordChannel discordChannel)
+        public static async Task DeleteAllMessagesFromChannelHelper(DiscordChannel discordChannel)
         {
             var allMessagesInChannel = await discordChannel.GetMessagesAsync();
             if (allMessagesInChannel.Count > 0)
@@ -45,7 +43,7 @@ namespace Bot_Balu_Ass_DB.Controller
         }
 
         //Parse strinf DateTime to DateTime
-        public static DateTime ParseStringToDateTime(string stringDateTime)
+        public static DateTime ParseStringToDateTimeHelper(string stringDateTime)
         {
             DateTime finalDateTime;
             string stringFormat = "dd.MM.yyyy";

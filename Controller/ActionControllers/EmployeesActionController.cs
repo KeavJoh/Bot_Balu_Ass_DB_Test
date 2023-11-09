@@ -1,23 +1,19 @@
 ﻿using Bot_Balu_Ass_DB.BotSettingsModels;
+using Bot_Balu_Ass_DB.Controller.MessageController;
 using Bot_Balu_Ass_DB.Data.Model;
-using DSharpPlus;
-using DSharpPlus.EventArgs;
+using Bot_Balu_Ass_DB.ValidationController;
 using DSharpPlus.Entities;
+using DSharpPlus.EventArgs;
+using DSharpPlus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.VisualBasic;
-using System.Reflection.Metadata.Ecma335;
-using Microsoft.EntityFrameworkCore;
-using Bot_Balu_Ass_DB.Controller.EventControllers;
-using Bot_Balu_Ass_DB.ValidationController;
-using Bot_Balu_Ass_DB.Controller.MessageController;
 
 namespace Bot_Balu_Ass_DB.Controller.ActionControllers
 {
-    internal class ParentsActionController
+    internal class EmployeesActionController
     {
         public static async Task AddDeregistrationChildToDbAction(ModalSubmitEventArgs args)
         {
@@ -55,7 +51,7 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
 
                 if (existingDeregistration == null && (dateFrom.DayOfWeek != DayOfWeek.Saturday || dateFrom.DayOfWeek != DayOfWeek.Sunday || dateFrom != DateTime.Now.Date))
                 {
-                    var newDeregistration = Deregistration.CreateDeregistration(childName, GlobalDataStore.ChildList.FirstOrDefault(x => x.Name == childName).Id, reason, dateFrom, DateTime.Now, true);
+                    var newDeregistration = Deregistration.CreateDeregistration(childName, GlobalDataStore.ChildList.FirstOrDefault(x => x.Name == childName).Id, reason, dateFrom, DateTime.Now, false);
 
                     await context.Deregistrations.AddAsync(newDeregistration);
                     await context.SaveChangesAsync();
@@ -85,12 +81,12 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
                     return;
                 }
 
-                while(dateToCheck <= dateTo)
+                while (dateToCheck <= dateTo)
                 {
                     if ((dateToCheck.DayOfWeek != DayOfWeek.Sunday && dateToCheck.DayOfWeek != DayOfWeek.Saturday) || dateToCheck < DateTime.Now)
                     {
                         var existingDeregistration = GlobalDataStore.DeregistrationList.FirstOrDefault(d => d.ChildName == childName && d.DeregistrationDate == dateToCheck);
-                        if(existingDeregistration == null)
+                        if (existingDeregistration == null)
                         {
                             dates.Add(dateToCheck);
                             dateToCheck = dateToCheck.AddDays(1);
@@ -107,11 +103,11 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
                     }
                 }
 
-                if(dates.Count != 0)
+                if (dates.Count != 0)
                 {
                     foreach (var date in dates)
                     {
-                        var newDeregistration = Deregistration.CreateDeregistration(childName, GlobalDataStore.ChildList.FirstOrDefault(x => x.Name == childName).Id, reason, date, DateTime.Now, true);
+                        var newDeregistration = Deregistration.CreateDeregistration(childName, GlobalDataStore.ChildList.FirstOrDefault(x => x.Name == childName).Id, reason, date, DateTime.Now, false);
 
                         await context.Deregistrations.AddAsync(newDeregistration);
                         await context.SaveChangesAsync();
@@ -141,13 +137,13 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
             DateTime dateFrom = HelpFunctionController.ParseStringToDateTimeHelper(values["dateFrom"]);
             DateTime dateTo = HelpFunctionController.ParseStringToDateTimeHelper(values["dateTo"]);
 
-            if(DeregistrationRegistrationValidation.DeregistrationRegistrationForOneDay(dateFrom, dateTo))
+            if (DeregistrationRegistrationValidation.DeregistrationRegistrationForOneDay(dateFrom, dateTo))
             {
                 var selectedDeregistration = GlobalDataStore.DeregistrationList.FirstOrDefault(d => d.ChildName == childName && d.DeregistrationDate == dateFrom);
                 if (selectedDeregistration != null)
                 {
                     var selectedDeregistrationInDb = context.Deregistrations.FirstOrDefault(d => d.Id == selectedDeregistration.Id);
-                    var newWithdrawDeregistration = WithdrawnDeregistration.CreateWithdrawnDeregistration(selectedDeregistrationInDb.ChildName, selectedDeregistrationInDb.ChildId, selectedDeregistrationInDb.Reason, selectedDeregistrationInDb.DeregistrationDate, selectedDeregistrationInDb.DateOfAction, selectedDeregistrationInDb.DeregistrationPerformedFromParents, true);
+                    var newWithdrawDeregistration = WithdrawnDeregistration.CreateWithdrawnDeregistration(selectedDeregistrationInDb.ChildName, selectedDeregistrationInDb.ChildId, selectedDeregistrationInDb.Reason, selectedDeregistrationInDb.DeregistrationDate, selectedDeregistrationInDb.DateOfAction, selectedDeregistrationInDb.DeregistrationPerformedFromParents, false);
 
                     await context.WithdrawnDeregistrations.AddAsync(newWithdrawDeregistration);
                     context.Deregistrations.Remove(selectedDeregistration);
@@ -169,25 +165,25 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
 
                 while (dateToCheck <= dateTo)
                 {
-                        var existingDeregistration = GlobalDataStore.DeregistrationList.FirstOrDefault(d => d.ChildName == childName && d.DeregistrationDate == dateToCheck);
-                        if (existingDeregistration == null)
-                        {
-                            dateToCheck = dateToCheck.AddDays(1);
-                            continue;
-                        }
-                        else
-                        {
-                            deregistrationForWithdrawn.Add(existingDeregistration);
-                            dateToCheck = dateToCheck.AddDays(1);
+                    var existingDeregistration = GlobalDataStore.DeregistrationList.FirstOrDefault(d => d.ChildName == childName && d.DeregistrationDate == dateToCheck);
+                    if (existingDeregistration == null)
+                    {
+                        dateToCheck = dateToCheck.AddDays(1);
+                        continue;
+                    }
+                    else
+                    {
+                        deregistrationForWithdrawn.Add(existingDeregistration);
+                        dateToCheck = dateToCheck.AddDays(1);
                     }
                 }
 
-                if(deregistrationForWithdrawn.Count != 0)
+                if (deregistrationForWithdrawn.Count != 0)
                 {
                     foreach (var data in deregistrationForWithdrawn)
                     {
                         var selectedDeregistrationInDb = context.Deregistrations.FirstOrDefault(d => d.Id == data.Id);
-                        var newWithdrawDeregistration = WithdrawnDeregistration.CreateWithdrawnDeregistration(selectedDeregistrationInDb.ChildName, selectedDeregistrationInDb.ChildId, selectedDeregistrationInDb.Reason, selectedDeregistrationInDb.DeregistrationDate, selectedDeregistrationInDb.DateOfAction, selectedDeregistrationInDb.DeregistrationPerformedFromParents, true);
+                        var newWithdrawDeregistration = WithdrawnDeregistration.CreateWithdrawnDeregistration(selectedDeregistrationInDb.ChildName, selectedDeregistrationInDb.ChildId, selectedDeregistrationInDb.Reason, selectedDeregistrationInDb.DeregistrationDate, selectedDeregistrationInDb.DateOfAction, selectedDeregistrationInDb.DeregistrationPerformedFromParents, false);
 
                         await context.WithdrawnDeregistrations.AddAsync(newWithdrawDeregistration);
                         context.Deregistrations.Remove(selectedDeregistrationInDb);
@@ -239,7 +235,7 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
             }
             else
             {
-                var newDeregistration = Deregistration.CreateDeregistration(childInDbName, childIdInDb, "Schnellabmeldung", DateTime.Now.Date, DateTime.Now, true);
+                var newDeregistration = Deregistration.CreateDeregistration(childInDbName, childIdInDb, "Schnellabmeldung", DateTime.Now.Date, DateTime.Now, false);
 
                 await context.Deregistrations.AddAsync(newDeregistration);
                 await context.SaveChangesAsync();
