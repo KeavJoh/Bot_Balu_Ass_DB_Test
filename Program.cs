@@ -1,5 +1,6 @@
 ﻿using Bot_Balu_Ass_DB.BotSettingsModels;
 using Bot_Balu_Ass_DB.Controller;
+using Bot_Balu_Ass_DB.Controller.ActionControllers;
 using Bot_Balu_Ass_DB.Controller.EventControllers;
 using Bot_Balu_Ass_DB.Controller.ModalControllers;
 using Bot_Balu_Ass_DB.Data.Database;
@@ -16,6 +17,7 @@ class Program
 {
     private static DiscordClient Client { get; set; }
     private static CommandsNextExtension Commands {  get; set; }
+    private static Timer? Timer {  get; set; }
     static async Task Main(string[] args)
     {
         //init bot configuration
@@ -43,7 +45,14 @@ class Program
 
         slashCommandsConfig.RegisterCommands<ExecutiveModalController>();
 
+        Timer = new Timer(ShortTimer, null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
+
         await Client.ConnectAsync();
         await Task.Delay(-1);
+    }
+
+    private static async void ShortTimer(object state)
+    {
+        await TimerActionController.TimerActionHandler();
     }
 }
