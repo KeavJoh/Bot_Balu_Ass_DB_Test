@@ -29,7 +29,7 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
                 foreach(var deregistration in oldDeregistrations)
                 {
                     CompleteDeregistration completeDeregistration = CompleteDeregistration.CreateCompleteDeregistration(deregistration);
-                    await context.completeDeregistrations.AddAsync(completeDeregistration);
+                    await context.CompleteDeregistrations.AddAsync(completeDeregistration);
                     context.Deregistrations.Remove(deregistration);
                 }
 
