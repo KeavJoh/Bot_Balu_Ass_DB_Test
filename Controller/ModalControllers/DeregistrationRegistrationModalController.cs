@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Bot_Balu_Ass_DB.Controller.ModalControllers
 {
-    internal class ParentsModalController : ApplicationCommandModule
+    internal class DeregistrationRegistrationModalController : ApplicationCommandModule
     {
         public static async Task DeregisterChildModal(ComponentInteractionCreateEventArgs args)
         {

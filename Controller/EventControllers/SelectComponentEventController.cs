@@ -22,18 +22,25 @@ namespace Bot_Balu_Ass_DB.Controller.EventControllers
             switch (selectId)
             {
                 case "addDeregistrationToDbDropdown":
-                    await ParentsModalController.DeregisterChildModal(args);
+                    await DeregistrationRegistrationModalController.DeregisterChildModal(args);
                     break;
                 case "deleteChildFromDbDropdown":
                     await HelpFunctionController.DeleteLastMessageFromChannelHelper(client, args);
                     await ExecutiveActionController.DeleteChildFromDbAction(args);
                     break;
                 case "deleteDeregestrationFromDbDropdown":
-                    await ParentsModalController.RegistrationChildModal(args);
+                    await DeregistrationRegistrationModalController.RegistrationChildModal(args);
                     break;
                 case "addDeregistrationForCurrontDayToDbDropdown":
                     await HelpFunctionController.DeleteLastMessageFromChannelHelper(client, args);
-                    await ParentsActionController.AddDeregistrationChildForCurrentDayToDbAction(args);
+                    if (args.Interaction.ChannelId == GlobalSettings.BotConfig.ChannelSettings.ParentsCommandChannel)
+                    {
+                        await ParentsActionController.AddDeregistrationChildForCurrentDayToDbAction(args);
+                    }
+                    else
+                    {
+                        await EmployeesActionController.AddDeregistrationChildForCurrentDayToDbAction(args);
+                    }
                     break;
             }
         }

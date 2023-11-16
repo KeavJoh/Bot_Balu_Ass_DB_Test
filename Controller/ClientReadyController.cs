@@ -26,6 +26,7 @@ namespace Bot_Balu_Ass_DB.Controller
         {
             await MainMessageController.ExecutiveMainMessage();
             await MainMessageController.ParentsMainMessage();
+            await MainMessageController.EmployeesMainMessage();
             await MainMessageController.DeregistrationInformationDateTimeNowMainMessage();
             await MainMessageController.DeregistrationInformationFutureMainMessage();
         }

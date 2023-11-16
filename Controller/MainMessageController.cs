@@ -25,13 +25,15 @@ namespace Bot_Balu_Ass_DB.Controller
 
             DiscordButtonComponent addChildToListButton = new DiscordButtonComponent(ButtonStyle.Primary, "addChildToListButton", "Kind hinzufügen");
             DiscordButtonComponent deleteChildFromListButton = new DiscordButtonComponent(ButtonStyle.Danger, "deleteChildFromListButton", "Kind entfernen");
+            DiscordButtonComponent addImportantDates = new DiscordButtonComponent(ButtonStyle.Primary, "addImportandDatesButton", "Termin hinzufügen");
 
             var message = new DiscordMessageBuilder()
                 .AddEmbed(new DiscordEmbedBuilder().WithColor(DiscordColor.DarkBlue)
                 .WithTitle("Hallo und herzlich Willkommen")
                 .WithDescription("Hier kann der Vorstand verschiedene Befehle ausführen. Klicke dazu einfach auf den gewünschten Befehl unter dieser Nachricht."))
                 .AddComponents(addChildToListButton)
-                .AddComponents(deleteChildFromListButton);
+                .AddComponents(deleteChildFromListButton)
+                .AddComponents(addImportantDates);
 
             await channelId.SendMessageAsync(message);
         }
@@ -43,7 +45,6 @@ namespace Bot_Balu_Ass_DB.Controller
             var channelIdParents = await client.GetChannelAsync(GlobalSettings.BotConfig.ChannelSettings.ParentsCommandChannel);
             var channelIdEmployees = await client.GetChannelAsync(GlobalSettings.BotConfig.ChannelSettings.EmployeesCommandChannel);
             await HelpFunctionController.DeleteAllMessagesFromChannelHelper(channelIdParents);
-            await HelpFunctionController.DeleteAllMessagesFromChannelHelper(channelIdEmployees);
 
             DiscordButtonComponent addDeregistrationForCurrontDayButton = new DiscordButtonComponent(ButtonStyle.Primary, "addDeregistrationForCurrontDayButton", "Schnellabmeldung");
             DiscordButtonComponent addDeregistrationButton = new DiscordButtonComponent(ButtonStyle.Primary, "addDeregistrationButton", "Abmelden");
@@ -62,6 +63,32 @@ namespace Bot_Balu_Ass_DB.Controller
                 .AddComponents(deleteDeregistrationButton);
 
             await channelIdParents.SendMessageAsync(message);
+        }
+
+        //Main message for parents in employees_command channel
+        public static async Task EmployeesMainMessage()
+        {
+            var client = GlobalSettings.DiscordClient;
+            var channelIdParents = await client.GetChannelAsync(GlobalSettings.BotConfig.ChannelSettings.ParentsCommandChannel);
+            var channelIdEmployees = await client.GetChannelAsync(GlobalSettings.BotConfig.ChannelSettings.EmployeesCommandChannel);
+            await HelpFunctionController.DeleteAllMessagesFromChannelHelper(channelIdEmployees);
+
+            DiscordButtonComponent addDeregistrationForCurrontDayButton = new DiscordButtonComponent(ButtonStyle.Primary, "addDeregistrationForCurrontDayButton", "Schnellabmeldung");
+            DiscordButtonComponent addDeregistrationButton = new DiscordButtonComponent(ButtonStyle.Primary, "addDeregistrationButton", "Abmelden");
+            DiscordButtonComponent deleteDeregistrationButton = new DiscordButtonComponent(ButtonStyle.Danger, "deleteDeregistrationButton", "Anmelden");
+
+            var message = new DiscordMessageBuilder()
+                .AddEmbed(new DiscordEmbedBuilder().WithColor(DiscordColor.DarkBlue)
+                .WithTitle("Hallo und herzlich Willkommen")
+                .WithDescription("Hier kannst du dein Kind Abmelden oder auch wieder Anmelden. Klicke dazu einfach auf einen der unten stehenden Befehle.")
+                .AddField("Schnellabmeldung", $"`Hier kannst du dein Kind für den aktuellen Tag abmelden`")
+                .AddField("Abmeldung", $"`Hier kannst du dein Kind für einen oder mehrere Tage abmelden`")
+                .AddField("Anmelden", $"`Hier kannst du eine Abmeldung für einen oder mehrere Tage rückgängig machen`")
+                .AddField("Heutiges Datum", $"`{DateTime.Now.Date.ToString("dd.MM.yyyy")}`", false))
+                .AddComponents(addDeregistrationForCurrontDayButton)
+                .AddComponents(addDeregistrationButton)
+                .AddComponents(deleteDeregistrationButton);
+
             await channelIdEmployees.SendMessageAsync(message);
         }
 

@@ -18,10 +18,10 @@ namespace Bot_Balu_Ass_DB.Controller.EventControllers
             switch (buttonId)
             {
                 case "addDeregistrationButton":
-                    await ParentsModalController.DeregisterChildDropdownModal(args);
+                    await DeregistrationRegistrationModalController.DeregisterChildDropdownModal(args);
                     break;
                 case "deleteDeregistrationButton":
-                    await ParentsModalController.RegisterChildDropdownModal(args);
+                    await DeregistrationRegistrationModalController.RegisterChildDropdownModal(args);
                     break;
                 case "addChildToListButton":
                     await ExecutiveModalController.AddChildToDBModal(args);
@@ -30,7 +30,7 @@ namespace Bot_Balu_Ass_DB.Controller.EventControllers
                     await ExecutiveModalController.DeleteChildFromDbModal(args);
                     break;
                 case "addDeregistrationForCurrontDayButton":
-                    await ParentsModalController.AddDeregistrationForCurrontDayDropdownModal(args);
+                    await DeregistrationRegistrationModalController.AddDeregistrationForCurrontDayDropdownModal(args);
                     break;
             }
         }

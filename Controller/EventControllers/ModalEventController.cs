@@ -24,7 +24,8 @@ namespace Bot_Balu_Ass_DB.Controller.EventControllers
                 switch (modalId)
                 {
                     case "deregisterChildPerformeFromParentModal":
-                        if(args.Interaction.ChannelId == GlobalSettings.BotConfig.ChannelSettings.ParentsCommandChannel)
+                        await HelpFunctionController.DeleteLastMessageFromChannelHelper(client, args);
+                        if (args.Interaction.ChannelId == GlobalSettings.BotConfig.ChannelSettings.ParentsCommandChannel)
                         {
                             await ParentsActionController.AddDeregistrationChildToDbAction(args);
                         }
@@ -32,11 +33,11 @@ namespace Bot_Balu_Ass_DB.Controller.EventControllers
                         {
                             await EmployeesActionController.AddDeregistrationChildToDbAction(args);
                         }
-                        await HelpFunctionController.DeleteLastMessageFromChannelHelper(client, args);
                         break;
 
                     case "registerChildPerformedFromParentModal":
-                        if(args.Interaction.ChannelId == GlobalSettings.BotConfig.ChannelSettings.ParentsCommandChannel)
+                        await HelpFunctionController.DeleteLastMessageFromChannelHelper(client, args);
+                        if (args.Interaction.ChannelId == GlobalSettings.BotConfig.ChannelSettings.ParentsCommandChannel)
                         {
                             await ParentsActionController.CompleteRegistrationToDbAction(args);
                         }
@@ -44,7 +45,6 @@ namespace Bot_Balu_Ass_DB.Controller.EventControllers
                         {
                             await EmployeesActionController.CompleteRegistrationToDbAction(args);
                         }
-                        await HelpFunctionController.DeleteLastMessageFromChannelHelper(client, args);
                         break;
                     case "addChildToDb":
                         await ExecutiveActionController.AddChildToDbAction(args);
