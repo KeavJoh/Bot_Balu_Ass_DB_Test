@@ -32,6 +32,8 @@ namespace Bot_Balu_Ass_DB.Controller.EventControllers
                 case "addDeregistrationForCurrontDayButton":
                     await DeregistrationRegistrationModalController.AddDeregistrationForCurrontDayDropdownModal(args);
                     break;
+                case "addImportandDatesButton":
+                    break;
             }
         }
     }

@@ -40,5 +40,15 @@ namespace Bot_Balu_Ass_DB.Controller.ModalControllers
 
             await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, message);
         }
+
+        public static async Task AddImportandDateModal(ComponentInteractionCreateEventArgs args)
+        {
+            var modal = new DiscordInteractionResponseBuilder()
+                .WithTitle("Termin hinzufügen")
+                .WithCustomId("addImportandDate")
+                .AddComponents(new TextInputComponent(label: "Anlass", "eventName", "bsp. Schließzeit"))
+                .AddComponents(new TextInputComponent(label: "Am", "dateFrom", "bsp. 20.01.2024", min_length: 10, max_length: 10))
+                .AddComponents(new TextInputComponent(label: "Bis", "dateTo", "Nur benötigt für Termine > 1 Tag", min_length: 10, max_length: 10));
+        }
     }
 }
