@@ -16,7 +16,7 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
             {
                 await CheckOldDeregistrations();
                 await GlobalDataStore.ReloadDeregistrationList();
-                await LogController.LogTimerTaskResult(DateTime.Now + " Tägliche Prüfung und neu erstellen der Abmeldungen wurde durchgeführt");
+                await LogController.CreateLogMessage(DateTime.Now + " Tägliche Prüfung und neu erstellen der Abmeldungen wurde durchgeführt");
             }
         }
 

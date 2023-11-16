@@ -8,7 +8,7 @@ namespace Bot_Balu_Ass_DB.Controller
 {
     internal class LogController
     {
-        public static async Task LogTimerTaskResult(string message)
+        public static async Task CreateLogMessage(string message)
         {
             string currentDirectory = Directory.GetCurrentDirectory();
             string logFile = Path.Combine(currentDirectory, "log.txt");
