@@ -20,7 +20,7 @@ namespace Bot_Balu_Ass_DB.Controller.ModalControllers
 
             var modal = new DiscordInteractionResponseBuilder()
                 .WithTitle("Kind abmelden")
-                .WithCustomId("deregisterChildPerformeFromParentModal")
+                .WithCustomId("deregisterChildModal")
                 .AddComponents(new TextInputComponent(label: "Name", "nameOfChild", value: nameChild, required: true))
                 .AddComponents(new TextInputComponent(label: "Von Datum (im Format tt.MM.jjjj)", "dateFrom", "bsp. 20.01.2024", min_length: 10, max_length: 10))
                 .AddComponents(new TextInputComponent(label: "Bis Datum (im Format tt.MM.jjjj)", "dateTo", "Nur benötigt für Abwesenheiten länger als 1 Tag", required: false, min_length: 10, max_length: 10))
@@ -48,7 +48,7 @@ namespace Bot_Balu_Ass_DB.Controller.ModalControllers
 
             var modal = new DiscordInteractionResponseBuilder()
                 .WithTitle("Kind Anmelden")
-                .WithCustomId("registerChildPerformedFromParentModal")
+                .WithCustomId("registerChildModal")
                 .AddComponents(new TextInputComponent(label: "Name", "nameOfChild", value: nameChild, required: true))
                 .AddComponents(new TextInputComponent(label: "Von Datum (im Format tt.MM.jjjj)", "dateFrom", "bsp. 20.01.2024", min_length: 10, max_length: 10))
                 .AddComponents(new TextInputComponent(label: "Bis Datum (im Format tt.MM.jjjj)", "dateTo", "Nur benötigt für Anmeldungen länger als 1 Tag", required: false, min_length: 10, max_length: 10));

@@ -23,7 +23,7 @@ namespace Bot_Balu_Ass_DB.Controller.EventControllers
 
                 switch (modalId)
                 {
-                    case "deregisterChildPerformeFromParentModal":
+                    case "deregisterChildModal":
                         await HelpFunctionController.DeleteLastMessageFromChannelHelper(client, args);
                         if (args.Interaction.ChannelId == GlobalSettings.BotConfig.ChannelSettings.ParentsCommandChannel)
                         {
@@ -35,7 +35,7 @@ namespace Bot_Balu_Ass_DB.Controller.EventControllers
                         }
                         break;
 
-                    case "registerChildPerformedFromParentModal":
+                    case "registerChildModal":
                         await HelpFunctionController.DeleteLastMessageFromChannelHelper(client, args);
                         if (args.Interaction.ChannelId == GlobalSettings.BotConfig.ChannelSettings.ParentsCommandChannel)
                         {
