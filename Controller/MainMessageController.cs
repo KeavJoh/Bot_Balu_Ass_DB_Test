@@ -16,10 +16,11 @@ namespace Bot_Balu_Ass_DB.Controller
 {
     internal class MainMessageController
     {
+        private static readonly DiscordClient client = GlobalSettings.DiscordClient;
+
         //Main message for executive in executive_command channel
         public static async Task ExecutiveMainMessage()
         {
-            var client = GlobalSettings.DiscordClient;
             var channelId = await client.GetChannelAsync(GlobalSettings.BotConfig.ChannelSettings.ExecutiveCommandChannel);
             await HelpFunctionController.DeleteAllMessagesFromChannelHelper(channelId);
 
@@ -41,7 +42,6 @@ namespace Bot_Balu_Ass_DB.Controller
         //Main message for parents in parents_command channel
         public static async Task ParentsMainMessage()
         {
-            var client = GlobalSettings.DiscordClient;
             var channelIdParents = await client.GetChannelAsync(GlobalSettings.BotConfig.ChannelSettings.ParentsCommandChannel);
             var channelIdEmployees = await client.GetChannelAsync(GlobalSettings.BotConfig.ChannelSettings.EmployeesCommandChannel);
             await HelpFunctionController.DeleteAllMessagesFromChannelHelper(channelIdParents);
@@ -68,7 +68,6 @@ namespace Bot_Balu_Ass_DB.Controller
         //Main message for parents in employees_command channel
         public static async Task EmployeesMainMessage()
         {
-            var client = GlobalSettings.DiscordClient;
             var channelIdParents = await client.GetChannelAsync(GlobalSettings.BotConfig.ChannelSettings.ParentsCommandChannel);
             var channelIdEmployees = await client.GetChannelAsync(GlobalSettings.BotConfig.ChannelSettings.EmployeesCommandChannel);
             await HelpFunctionController.DeleteAllMessagesFromChannelHelper(channelIdEmployees);
@@ -95,7 +94,6 @@ namespace Bot_Balu_Ass_DB.Controller
         //Main information message of deregistration for actual day
         public static async Task DeregistrationInformationDateTimeNowMainMessage()
         {
-            var client = GlobalSettings.DiscordClient;
             var channelId = await client.GetChannelAsync(GlobalSettings.BotConfig.ChannelSettings.ParentsInformationChannel);
             await HelpFunctionController.DeleteAllMessagesFromChannelHelper(channelId);
 
@@ -135,7 +133,6 @@ namespace Bot_Balu_Ass_DB.Controller
         //Main information message of deregistratios in the future
         public static async Task DeregistrationInformationFutureMainMessage()
         {
-            var client = GlobalSettings.DiscordClient;
             var channelId = await client.GetChannelAsync(GlobalSettings.BotConfig.ChannelSettings.ParentsInformationChannel);
 
             var deregistrationList = GlobalDataStore.DeregistrationList
