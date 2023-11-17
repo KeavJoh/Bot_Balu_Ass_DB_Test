@@ -17,11 +17,13 @@ namespace Bot_Balu_Ass_DB.BotSettingsModels
 
         public static List<ChildModel> ChildList { get; set; }
         public static List<Deregistration> DeregistrationList { get; set; }
+        public static List<ImportandDate> ImportandDateList { get; set; }
 
         public static async Task InitializeGlobalDataStore()
         {
             ChildList = await context.Children.OrderBy(x => x.Name).ToListAsync();
             DeregistrationList = await context.Deregistrations.OrderBy(x => x.DeregistrationDate).ToListAsync();
+            ImportandDateList = await context.ImportandDates.OrderBy(x => x.Date).ToListAsync();
         }
 
         public static async Task ReloadChildList()
@@ -49,6 +51,11 @@ namespace Bot_Balu_Ass_DB.BotSettingsModels
             }
 
             return options;
+        }
+
+        public static async Task ReloadImportandDateList()
+        {
+            ImportandDateList = await context.ImportandDates.OrderBy(x => x.Date).ToListAsync();
         }
 
     }

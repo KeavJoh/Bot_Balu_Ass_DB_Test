@@ -12,6 +12,7 @@ namespace Bot_Balu_Ass_DB.Data.Database
         public DbSet<Deregistration> Deregistrations { get; set; }
         public DbSet<WithdrawnDeregistration> WithdrawnDeregistrations { get; set; }
         public DbSet<CompleteDeregistration> CompleteDeregistrations { get; set; }
+        public DbSet<ImportandDate> ImportandDates { get; set; }
 
         public ApplicationDbContext (BotConfig botConfig)
         {

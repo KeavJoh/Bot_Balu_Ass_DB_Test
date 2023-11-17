@@ -17,9 +17,10 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
 {
     internal class ExecutiveActionController
     {
+        private static readonly ApplicationDbContext context = GlobalSettings.Context;
+
         public static async Task AddChildToDbAction(ModalSubmitEventArgs modal)
         {
-            var context = GlobalSettings.Context;
             string childName = modal.Values["nameOfChild"];
             string childMother = modal.Values["nameOfMother"];
             string childFather = modal.Values["nameOfFather"];
@@ -47,7 +48,6 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
 
         public static async Task DeleteChildFromDbAction(ComponentInteractionCreateEventArgs args)
         {
-            var context = GlobalSettings.Context;
             var selectedChild = args.Values.FirstOrDefault();
 
             int.TryParse(selectedChild, out var childIdInDb);
@@ -88,6 +88,43 @@ namespace Bot_Balu_Ass_DB.Controller.ActionControllers
 
             await Task.Delay(10000);
             await args.Interaction.DeleteOriginalResponseAsync();
+        }
+
+        public static async Task AddImportandDateToDbAction(ModalSubmitEventArgs args)
+        {
+            string importandDateEventName = args.Values["eventName"];
+            string? importandDateComment = null;
+            DateTime importandDateDateFrom = HelpFunctionController.ParseStringToDateTimeHelper(args.Values["dateFrom"]);
+            DateTime? importdandDateDateTo = null;
+
+            if (args.Values["comment"] != "")
+            {
+                importandDateComment = args.Values["comment"];
+            }
+
+            if (args.Values["dateTo"] != "")
+            {
+                importdandDateDateTo = HelpFunctionController.ParseStringToDateTimeHelper(args.Values["dateTo"]);
+            }
+
+            var newImportandDate = new ImportandDate
+            {
+                EventName = importandDateEventName,
+                EventComment = importandDateComment,
+                Date = importandDateDateFrom,
+                DateTo = importdandDateDateTo
+            };
+
+            await context.ImportandDates.AddAsync(newImportandDate);
+            await context.SaveChangesAsync();
+            await GlobalDataStore.ReloadImportandDateList();
+
+            await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                .WithContent($"Ich habe den Termin {importandDateEventName} erstellt"));
+
+            await Task.Delay(10000);
+            await args.Interaction.DeleteOriginalResponseAsync();
+            
         }
 
     }

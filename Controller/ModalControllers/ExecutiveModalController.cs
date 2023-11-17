@@ -21,8 +21,8 @@ namespace Bot_Balu_Ass_DB.Controller.ModalControllers
                 .WithTitle("Kind hinzufügen")
                 .WithCustomId("addChildToDb")
                 .AddComponents(new TextInputComponent(label: "Name", "nameOfChild", "Vorname des Kindes"))
-                .AddComponents(new TextInputComponent(label: "Mutter", "nameOfMother", "Name der Mutter"))
-                .AddComponents(new TextInputComponent(label: "Vater", "nameOfFather", "Name des Vaters"));
+                .AddComponents(new TextInputComponent(label: "Mutter", "nameOfMother", "Name der Mutter", required: false))
+                .AddComponents(new TextInputComponent(label: "Vater", "nameOfFather", "Name des Vaters", required: false));
 
             await args.Interaction.CreateResponseAsync(InteractionResponseType.Modal, modal);
         }
@@ -47,8 +47,11 @@ namespace Bot_Balu_Ass_DB.Controller.ModalControllers
                 .WithTitle("Termin hinzufügen")
                 .WithCustomId("addImportandDate")
                 .AddComponents(new TextInputComponent(label: "Anlass", "eventName", "bsp. Schließzeit"))
+                .AddComponents(new TextInputComponent(label: "Kommentar", "comment", "Kurze Beschreibung. Kein Pflichfeld!", required: false))
                 .AddComponents(new TextInputComponent(label: "Am", "dateFrom", "bsp. 20.01.2024", min_length: 10, max_length: 10))
-                .AddComponents(new TextInputComponent(label: "Bis", "dateTo", "Nur benötigt für Termine > 1 Tag", min_length: 10, max_length: 10));
+                .AddComponents(new TextInputComponent(label: "Bis", "dateTo", "Nur benötigt für Termine > 1 Tag", required: false, min_length: 10, max_length: 10));
+
+            await args.Interaction.CreateResponseAsync(InteractionResponseType.Modal, modal);
         }
     }
 }

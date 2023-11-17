@@ -49,6 +49,9 @@ namespace Bot_Balu_Ass_DB.Controller.EventControllers
                     case "addChildToDb":
                         await ExecutiveActionController.AddChildToDbAction(args);
                         break;
+                    case "addImportandDate":
+                        await ExecutiveActionController.AddImportandDateToDbAction(args);
+                        break;
                 }
             }
         }
